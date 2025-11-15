@@ -1,12 +1,11 @@
 package com.example.classes;
 
-import java.util.Scanner;
-
 // Base class account
 public class Account{
     // Sets username and password's max size to 128 characters
     final protected int MAX_USERNAME_SIZE = 128;
     final protected int MAX_PASSWORD_SIZE = 128;
+    final protected static String ROOT_DIRECTORY = "accounts";
 
     protected String username;
     protected String name;
@@ -17,27 +16,21 @@ public class Account{
 
     // Login method
     public void login() {
-        Scanner sc = new Scanner(System.in);
-        
         System.out.println("====== Login System ======");
 
         boolean isValid;
         do {
             // Ask for username
-            System.out.print("Enter username: ");
-            String username = sc.nextLine();
+            String username = InputHandler.readNonEmptyLine("Enter username: ");
             
             // Ask for password
-            System.out.print("Enter password: ");
-            String password = sc.nextLine();
+            String password = InputHandler.readNonEmptyLine("Enter password: ");
 
             isValid = isCredentialsCorrect(username, password); 
             if (!isValid) {
                 System.out.println("Credentials are not correct, Try again!");
             }
         } while (!isValid);
-
-        sc.close();
     };
 
     // Logout method
