@@ -3,7 +3,7 @@ package com.example.classes;
 import java.util.Set;
 
 // UI class for design
-class UIManager extends Validation {
+class UIManager {
     
     // Login choice method
     public static void displayLoginChoice(){
@@ -26,7 +26,7 @@ class UIManager extends Validation {
         System.out.print(menu);
 
         // Valid choices
-        int choice = getValidChoice(Set.of(3, 2, 1, 0));
+        int choice = InputHandler.getValidChoice(Set.of(3, 2, 1, 0));
 
         Account c;
         
@@ -68,7 +68,7 @@ class UIManager extends Validation {
         System.out.print(menu);
 
         // Valid choices
-        int choice = getValidChoice(Set.of(4, 3, 2, 1, 0));
+        int choice = InputHandler.getValidChoice(Set.of(4, 3, 2, 1, 0));
 
         Account c;
         
@@ -113,7 +113,7 @@ class UIManager extends Validation {
         System.out.print(menu);
 
         // Valid choices
-        int choice = getValidChoice(Set.of(4, 3, 2, 1, 0));
+        int choice = InputHandler.getValidChoice(Set.of(4, 3, 2, 1, 0));
         Pharmacy p = new Pharmacy();
         switch (choice){
             case 1 -> p.addMedicine();
@@ -153,7 +153,7 @@ class UIManager extends Validation {
         System.out.print(menu);
 
         // Valid choices
-        int choice = getValidChoice(Set.of(8, 7, 6, 5, 4, 3, 2, 1, 0));
+        int choice = InputHandler.getValidChoice(Set.of(8, 7, 6, 5, 4, 3, 2, 1, 0));
 
         Account c;
         
