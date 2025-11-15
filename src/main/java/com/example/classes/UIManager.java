@@ -92,6 +92,7 @@ class UIManager {
     }
 
     public static void displayPharmacyMenu(){
+        // Menu display
         String menu = """
                 =============================================
                 |             + Pharmacy Menu +             |
@@ -110,22 +111,35 @@ class UIManager {
                 Please Choose an Option.
                 """;
 
-        System.out.print(menu);
-
-        // Valid choices
-        int choice = InputHandler.getValidChoice(Set.of(4, 3, 2, 1, 0));
+        // Initialize necessary variables
         Pharmacy p = new Pharmacy();
-        switch (choice){
-            case 1 -> p.addMedicine();
-            case 2 -> p.searchMedicine();
-            case 3 -> p.updateMedicineAmount();
-            case 4 -> p.updateMedicinePrice(); 
-            case 5 -> p.deleteMedicine();
-            case 0 -> {
-                System.out.println("\nExiting...");
-                break;
-            }
-        };
+        int choice;
+        boolean running = true;
+
+        // Get user choice
+        do {
+            System.out.print(menu);
+
+            switch (choice = InputHandler.getValidChoice(Set.of(4, 3, 2, 1, 0))){
+                case 1 -> {
+                    do {
+                        p.addMedicine();
+                        System.out.println("1. Add another medicine");
+                        System.out.println("2. Back to menu");
+                        System.out.print("Enter option: ");
+                        choice = InputHandler.getValidChoice(Set.of(1, 2));
+                    } while (choice != 2);
+                }
+                case 2 -> p.searchMedicine();
+                case 3 -> p.updateMedicineAmount();
+                case 4 -> p.updateMedicinePrice(); 
+                case 5 -> p.deleteMedicine();
+                case 0 -> {
+                    System.out.println("\nExiting...");
+                    running = false;
+                }
+            };
+        } while (running);
     }
 
     public static void displayAdminMenu(){
