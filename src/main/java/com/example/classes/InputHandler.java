@@ -1,0 +1,170 @@
+package com.example.classes;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.util.Scanner;
+import java.util.Set;
+
+// This class handles user input and input validation
+public class InputHandler {
+    private static final Scanner SCAN = new Scanner(System.in);
+
+    // Method for retrieving and validating inputs
+    public static int getValidChoice(Set<Integer> validChoices){
+        int choice;
+
+        while (true) { 
+            System.out.print("\nEnter Choice >> ");
+            String input = SCAN.nextLine();
+
+            // Validate inputs
+            try {
+                choice = Integer.parseInt(input); // Convert strings to int
+
+                // Checks if integer is one of the allowed choices
+                if (validChoices.contains(choice)){
+                    // Input is valid
+                    return choice;
+                } else {
+                    // Input is numeric but not allowed
+                    System.out.println("\nInvalid choice. \nAllowed: " + validChoices + "\n");
+                }
+            } catch (NumberFormatException e) {
+                // If input is not numeric
+                System.out.println("\nInvalid input. \nPlease enter an integer.\n");
+            }
+        }
+    }
+
+    /**
+     * Reads a non-empty line of input from the user.
+     * 
+     * Prompts the user with the given message and repeatedly reads input until
+     * a non-empty string is provided. Input is trimmed of leading and trailing whitespace
+     * before being returned.
+     * 
+     * @param prompt the message displayed to the user before reading input
+     * @return a trimmed, non-empty string entered by the user
+     */
+    public static String readNonEmptyLine(String prompt) {
+        String input;
+        
+        while (true) {
+            System.out.print(prompt);
+            input = SCAN.nextLine();
+        
+            if (input.isEmpty()) {
+                System.err.println("[ERROR]: Input cannot be empty");    
+                continue;
+            }
+            input = input.trim();
+            return input;
+        }
+    }
+
+    /**
+     * Reads a non-negative integer from the user.
+     * 
+     * Prompts the user with the given message and repeatedly reads input until
+     * a valid non-negative integer is provided. Input is validated to ensure it is
+     * a valid integer and is not negative. This method uses {@link #readNonEmptyLine(String)}
+     * to handle input collection and trimming.
+     * 
+     * @param prompt the message displayed to the user before reading input
+     * @return a non-negative integer entered by the user
+     * @see #readNonEmptyLine(String)
+     */
+    public static int readInt(String prompt) {
+        String input;
+        int i;
+
+        while (true) {
+            input = readNonEmptyLine(prompt);
+
+            try {
+                i = Integer.parseInt(input);
+
+                if (i < 0) {
+                    System.err.println("[ERROR]: Cannot be negative");
+                    continue;
+                }
+
+                return i;
+            } catch (NumberFormatException e) {
+                System.err.println("[ERROR]: Input must be a number.");
+            } catch (Exception e) {
+                System.err.println("[ERROR]: " + e);
+            }
+        }
+    }
+
+    /**
+     * Reads a non-negative double from the user.
+     * 
+     * Prompts the user with the given message and repeatedly reads input until
+     * a valid non-negative double is provided. Input is validated to ensure it is
+     * a valid double and is not negative. This method uses {@link #readNonEmptyLine(String)}
+     * to handle input collection and trimming.
+     * 
+     * @param prompt the message displayed to the user before reading input
+     * @return a non-negative double entered by the user
+     * @see #readNonEmptyLine(String)
+     */
+    public static double readDouble(String prompt) {
+        String input;
+        double d;
+
+        while (true) {
+            input = readNonEmptyLine(prompt);
+
+            try {
+                d = Double.parseDouble(input);
+
+                if (d < 0) {
+                    System.err.println("[ERROR]: Cannot be negative");
+                    continue;
+                }
+
+                return d;
+            } catch (NumberFormatException e) {
+                System.err.println("[ERROR]: Input must be a number.");
+            } catch (Exception e) {
+                System.err.println("[ERROR]: " + e);
+            }
+        }
+    }
+
+    /**
+     * Reads a date from the user in {@code dd/MM/yyyy} format.
+     * 
+     * Prompts the user with the given message and repeatedly reads input until
+     * a valid date in {@code dd/MM/yyyy} format is provided. This method uses 
+     * {@link #readNonEmptyLine(String)} to handle input collection and trimming.
+     * 
+     * @param prompt the message displayed to the user before reading input
+     * @return a date string in {@code dd/MM/yyyy} format entered by the user
+     * @see #readNonEmptyLine(String)
+     */
+    public static String readDate(String prompt) {
+        String input;
+        LocalDate date;
+        DateTimeFormatter format = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+        while (true) {
+            input = readNonEmptyLine(prompt);
+
+            try {
+                date = LocalDate.parse(input, format);
+                return date.format(format);
+            } catch (DateTimeParseException e) {
+                System.out.println("[ERROR]: Incorrect date format. Use dd/MM/yyyy");
+            }
+        }
+    }
+
+    // Reminder: Call this on the very last line of the "main" program
+    public static void close() {
+        SCAN.close();
+    }  
+}
