@@ -53,4 +53,16 @@ class Medicine {
             this.price = price;
         }
     }
+
+    // Test method
+    public void details() {
+        System.out.println("====== Medicine Details ======");
+        System.out.println("Name: " + name);
+        System.out.println("Brand: " + brand);
+        System.out.println("Purpose: " + purpose);
+        System.out.println("Expiration Date: " + expirationDate);
+        System.out.println("Amount: " + amount);
+        System.out.println("Price: $" + price);
+        System.out.println("===============================");
+    }
 }
