@@ -40,4 +40,22 @@ public class Account{
     public boolean isCredentialsCorrect(String username, String password) {
         return this.username.equals(username) && this.password.equals(password);
     };
+
+    // Getters
+    public String getUsername() {
+        return username;
+    }
+    public String getPassword() {
+        return password;
+    }
+    public String getName() {
+        return name;
+    }
+
+    // Test method
+    public void details() {
+        System.out.println(name);
+        System.out.println(username);
+        System.out.println(password);
+    }
 }
