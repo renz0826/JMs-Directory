@@ -22,32 +22,51 @@ class UIManager {
 
                 Please Select an Account Type.
                 """;
+        Account authenticated = null;
+        AccountType accountType;
 
-        System.out.print(menu);
+        // Login loop
+        while (true) {
+            // display menu
+            System.out.print(menu);
+            // ask user which account to login
+            accountType = switch(InputHandler.getValidChoice(Set.of(3, 2, 1, 0))) {
+                case 1 -> AccountType.CUSTOMER;
+                case 2 -> AccountType.PHARMACY;
+                case 3 -> AccountType.ADMIN;
+                case 0 -> {
+                    System.out.println("\nExiting...");
+                    yield null;
+                }
+                default -> null;
+            };
 
-        // Valid choices
-        int choice = InputHandler.getValidChoice(Set.of(3, 2, 1, 0));
+            // prompt user credentials
+            while (authenticated == null) {
+                System.out.println("====== Login System ======");
+                String username = InputHandler.readNonEmptyLine("Enter username: ");
+                String password = InputHandler.readNonEmptyLine("Enter password: ");
+                // verify credentials
+                authenticated = switch (accountType) {
+                    case CUSTOMER -> AuthService.logInCustomer(username, password);
+                    case PHARMACY -> AuthService.logInPharmacy(username, password);
+                    case ADMIN -> AuthService.logInAdmin(username, password);
+                };
 
-        Account c;
-        
-        switch (choice){
-            case 1:
-                c = new Customer(); //TODO: customer must not be parameterized
-                c.login();
-                break;
-            case 2:
-                //s = new Customer("a", "b");
-                break;
-            case 3:
-                //s = new Customer("a", "b");
-                break;
-            case 0:
-                System.out.println("\nExiting...");
-                break;
+                if (authenticated == null) {
+                    System.out.println("Login failed. Enter anything to try again.");
+                    String input = InputHandler.readNonEmptyLine("Enter 'q' to exit: ");
+                    if (input == "q") break;
+                }
+            }
+
+            if (authenticated instanceof Customer) displayCustomerMenu((Customer) authenticated);
+            else if (authenticated instanceof Pharmacy) displayPharmacyMenu((Pharmacy) authenticated);
+            else if (authenticated instanceof Admin) displayAdminMenu((Admin) authenticated);
         }
     }
 
-    public static void displayCustomerMenu(){
+    public static void displayCustomerMenu(Customer customer){
         String menu = """
                 =============================================
                 |             + Customer Menu +             |
@@ -91,7 +110,8 @@ class UIManager {
         }
     }
 
-    public static void displayPharmacyMenu(){
+    public static void displayPharmacyMenu(Pharmacy pharmacy){
+        // Menu display
         String menu = """
                 =============================================
                 |             + Pharmacy Menu +             |
@@ -128,7 +148,7 @@ class UIManager {
         };
     }
 
-    public static void displayAdminMenu(){
+    public static void displayAdminMenu(Admin admin){
         String menu = """
                 ==============================================
                 |               + Admin Menu +               |
