@@ -60,7 +60,7 @@ class UIManager {
                 if (authenticated == null) {
                     System.out.println("Login failed. Enter anything to try again.");
                     String input = InputHandler.readNonEmptyLine("Enter 'q' to exit: ");
-                    if (input == "q") break;
+                    if (input.equals("q")) break;
                 }
             }
 
@@ -98,8 +98,6 @@ class UIManager {
         
         switch (choice){
             case 1:
-                c = new Customer(); //TODO: customer must not be parameterized
-                c.login();
                 break;
             case 2:
                 //s = new Customer("a", "b");
@@ -136,7 +134,6 @@ class UIManager {
                 """;
 
         // Initialize necessary variables
-        Pharmacy p = new Pharmacy();
         int choice;
         boolean running = true;
 
@@ -147,17 +144,17 @@ class UIManager {
             switch (choice = InputHandler.getValidChoice(Set.of(4, 3, 2, 1, 0))){
                 case 1 -> {
                     do {
-                        p.addMedicine();
+                        pharmacy.addMedicine();
                         System.out.println("1. Add another medicine");
                         System.out.println("2. Back to menu");
                         System.out.print("Enter option: ");
                         choice = InputHandler.getValidChoice(Set.of(1, 2));
                     } while (choice != 2);
                 }
-                case 2 -> p.searchMedicine();
-                case 3 -> p.updateMedicineAmount();
-                case 4 -> p.updateMedicinePrice(); 
-                case 5 -> p.deleteMedicine();
+                case 2 -> pharmacy.searchMedicine();
+                case 3 -> pharmacy.updateMedicineAmount();
+                case 4 -> pharmacy.updateMedicinePrice(); 
+                case 5 -> pharmacy.deleteMedicine();
                 case 0 -> {
                     System.out.println("\nExiting...");
                     running = false;
@@ -197,8 +194,6 @@ class UIManager {
         
         switch (choice){
             case 1:
-                c = new Customer(); //TODO: customer must not be parameterized
-                c.login();
                 break;
             case 2:
                 //s = new Customer("a", "b");
