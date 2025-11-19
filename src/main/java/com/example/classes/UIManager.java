@@ -29,6 +29,7 @@ class UIManager {
         while (true) {
             // display menu
             System.out.print(menu);
+            
             // ask user which account to login
             accountType = switch(InputHandler.getValidChoice(Set.of(3, 2, 1, 0))) {
                 case 1 -> AccountType.CUSTOMER;
@@ -41,11 +42,14 @@ class UIManager {
                 default -> null;
             };
 
+            if (accountType == null) break;
+
             // prompt user credentials
             while (authenticated == null) {
                 System.out.println("====== Login System ======");
                 String username = InputHandler.readNonEmptyLine("Enter username: ");
                 String password = InputHandler.readNonEmptyLine("Enter password: ");
+                
                 // verify credentials
                 authenticated = switch (accountType) {
                     case CUSTOMER -> AuthService.logInCustomer(username, password);
@@ -60,6 +64,7 @@ class UIManager {
                 }
             }
 
+            // Call respective Account menu
             if (authenticated instanceof Customer) displayCustomerMenu((Customer) authenticated);
             else if (authenticated instanceof Pharmacy) displayPharmacyMenu((Pharmacy) authenticated);
             else if (authenticated instanceof Admin) displayAdminMenu((Admin) authenticated);

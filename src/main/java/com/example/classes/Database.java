@@ -10,6 +10,8 @@ import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Database {
     private static ObjectMapper objectMapper = new ObjectMapper()
@@ -48,9 +50,15 @@ public class Database {
      * @return 
      *  - A DirectoryStream<Path> iterator of the json files, or null if an error occurs
      */ 
-    public static DirectoryStream<Path> listJsonFiles(Path directory) {
+    public static List<Path> getJsonFilePaths(Path directory) {
+        List<Path> paths = new ArrayList<>();
+
         try (DirectoryStream<Path> stream = Files.newDirectoryStream(directory, "*.json")) {
-            return stream;
+            for (Path path : stream) {
+                paths.add(path);
+            };
+
+            return paths;
         } catch (IOException e) {
             e.printStackTrace();
         }
