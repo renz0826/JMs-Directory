@@ -141,7 +141,7 @@ class UIManager {
         do {
             System.out.print(menu);
 
-            switch (choice = InputHandler.getValidChoice(Set.of(4, 3, 2, 1, 0))){
+            switch (choice = InputHandler.getValidChoice(Set.of(5, 4, 3, 2, 1, 0))){
                 case 1 -> {
                     do {
                         pharmacy.addMedicine();
