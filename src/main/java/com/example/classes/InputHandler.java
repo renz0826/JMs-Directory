@@ -49,11 +49,11 @@ public class InputHandler {
                     return choice;
                 } else {
                     // Input is numeric but not allowed
-                    System.out.println("\nInvalid choice. \nAllowed: " + validChoices + "\n");
+                    System.out.println("\nInvalid choice. \nAllowed: " + validChoices + "");
                 }
             } catch (NumberFormatException e) {
                 // If input is not numeric
-                System.out.println("\nInvalid input. \nPlease enter an integer.\n");
+                System.out.println("\nInvalid input. \nPlease enter an integer.");
             }
         }
     }
@@ -88,10 +88,9 @@ public class InputHandler {
      * Reads an integer from the user.
      *
      * Prompts the user with the given message and repeatedly reads input until
-     * a valid non-negative integer is provided. Input is validated to ensure it
-     * is a valid integer and is not negative. This method uses
-     * {@link #readNonEmptyLine(String)} to handle input collection and
-     * trimming.
+     * a valid integer is provided. Input is validated to ensure it is a valid
+     * integer. This method uses {@link #readNonEmptyLine(String)} to handle
+     * input collection and trimming.
      *
      * @param prompt the message displayed to the user before reading input
      * @param allowNegative whether negatives are allowed or not
