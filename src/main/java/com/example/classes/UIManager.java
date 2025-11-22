@@ -173,7 +173,7 @@ class UIManager {
                         }
                     } while (true);
                 }
-                case 3 -> {
+                case 3, 4 -> {
                     List<Medicine> medicines = pharmacy.getMedicines();
                     // for matching strings representing a double number
                     String realDoublePattern = "-?(\\d*\\.\\d+|\\d+\\.\\d*)"; 
@@ -198,6 +198,7 @@ class UIManager {
                         
                         int pos = 0;
                         String targetName;
+
                         // if number then select medicine, else search
                         try {
                             pos = Integer.parseInt(input);
@@ -211,12 +212,18 @@ class UIManager {
                             System.out.println("[ERROR]: Medicine not found at position " + pos);
                             continue;
                         }
-                        
-                        int amount = InputHandler.readInt("Enter amount: ", true);
-                        pharmacy.updateMedicineAmount(targetName, amount);
+
+                        if (choice == 3) { 
+                            int amount = InputHandler.readInt("Enter amount: ", true);
+                            pharmacy.updateMedicineAmount(targetName, amount); 
+                        }
+                        else { 
+                            double amount = InputHandler.readDouble("Enter new price: ");
+                            pharmacy.updateMedicinePrice(targetName, amount); 
+                        }
+
                     } while (true);
                 }
-                case 4 -> pharmacy.updateMedicinePrice(); 
                 case 5 -> pharmacy.deleteMedicine();
                 case 0 -> {
                     System.out.println("\nExiting...");

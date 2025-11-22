@@ -67,7 +67,14 @@ public class Pharmacy extends Account {
         Database.save(this);
     }
 
-    public void updateMedicinePrice() {}
+    public void updateMedicinePrice(String targetName, double amount) {
+        Medicine medicine = getMedicine(targetName);
+
+        if (amount < 0) { medicine.setAmount(0); }
+        medicine.setPrice(amount);
+        Database.save(this);
+    }
+
     public void deleteMedicine() {}
 
     // Getters
@@ -75,6 +82,7 @@ public class Pharmacy extends Account {
         return medicines;
     }
 
+    // returns the medicine that matches the targetName
     public Medicine getMedicine(String targetName) {
         for (Medicine medicine : medicines) {
             if (medicine.getName().toLowerCase().equals(targetName.toLowerCase())) {
