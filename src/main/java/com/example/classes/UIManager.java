@@ -156,8 +156,22 @@ class UIManager {
                     } while (choice != 2);
                 }
                 case 2 -> {
+                    // display all medicines once
                     displayData(pharmacy.getMedicines());
-                    pharmacy.searchMedicine();
+
+                    do {
+                        System.out.println("Search medicine by name or enter 'q' to exit.");
+                        String targetName = InputHandler.readNonEmptyLine("Enter: ");
+                        if (targetName.equalsIgnoreCase("q")) break;
+                        List<Medicine> medicines = pharmacy.searchMedicine(targetName);
+
+                        if (medicines == null) {
+                            System.out.println("No results found");
+                        } else {
+                            displayData(medicines);
+                        }
+                    } while (true);
+
                 }
                 case 3 -> pharmacy.updateMedicineAmount();
                 case 4 -> pharmacy.updateMedicinePrice(); 
