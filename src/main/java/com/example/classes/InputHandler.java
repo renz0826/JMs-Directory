@@ -64,18 +64,19 @@ public class InputHandler {
     }
 
     /**
-     * Reads a non-negative integer from the user.
+     * Reads an integer from the user.
      * 
      * Prompts the user with the given message and repeatedly reads input until
-     * a valid non-negative integer is provided. Input is validated to ensure it is
-     * a valid integer and is not negative. This method uses {@link #readNonEmptyLine(String)}
+     * a valid integer is provided. Input is validated to ensure it is
+     * a valid integer. This method uses {@link #readNonEmptyLine(String)}
      * to handle input collection and trimming.
      * 
      * @param prompt the message displayed to the user before reading input
-     * @return a non-negative integer entered by the user
+     * @param allowNegative whether negatives are allowed or not
+     * @return an integer entered by the user
      * @see #readNonEmptyLine(String)
      */
-    public static int readInt(String prompt) {
+    public static int readInt(String prompt, boolean allowNegative) {
         String input;
         int i;
 
@@ -85,18 +86,22 @@ public class InputHandler {
             try {
                 i = Integer.parseInt(input);
 
-                if (i < 0) {
+                if (i < 0 && !allowNegative) {
                     System.err.println("[ERROR]: Cannot be negative");
                     continue;
                 }
 
                 return i;
             } catch (NumberFormatException e) {
-                System.err.println("[ERROR]: Input must be a number.");
+                System.err.println("[ERROR]: Input must be an integer.");
             } catch (Exception e) {
                 System.err.println("[ERROR]: " + e);
             }
         }
+    }
+    
+    public static int readInt(String prompt) {
+        return readInt(prompt, false);
     }
 
     /**
