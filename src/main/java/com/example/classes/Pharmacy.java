@@ -47,7 +47,6 @@ public class Pharmacy extends Account {
     public List<Medicine> searchMedicine(String targetName) {
         List<Medicine> matched = new ArrayList<>();
 
-        // search all names containing target string
         for (Medicine medicine : medicines) {
             if (medicine.getName().toLowerCase().contains(targetName.toLowerCase())) {
                 matched.add(medicine);
@@ -58,13 +57,32 @@ public class Pharmacy extends Account {
         return matched;
     }
 
-    public void updateMedicineAmount() {}
+    public void updateMedicineAmount(String targetName, int amount) {
+        Medicine medicine = getMedicine(targetName);
+
+        // set to 0 if amount would fall under 0
+        int result = medicine.getAmount() + amount;
+        if (result < 0) { medicine.setAmount(0); } 
+        else { medicine.setAmount(result); }
+        Database.saveToFile(temporaryFile, permanentFile, this);
+    }
+
     public void updateMedicinePrice() {}
     public void deleteMedicine() {}
 
     // Getters
     public List<Medicine> getMedicines() {
         return medicines;
+    }
+
+    public Medicine getMedicine(String targetName) {
+        for (Medicine medicine : medicines) {
+            if (medicine.getName().toLowerCase().equals(targetName.toLowerCase())) {
+                return medicine;
+            }
+        }
+
+        return null;
     }
 
     // Test methods
