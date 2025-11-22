@@ -11,36 +11,16 @@ import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Database {
+    private static Map<Account, Path> objectFiles = new HashMap<>();
     private static ObjectMapper objectMapper = new ObjectMapper()
             .enable(SerializationFeature.INDENT_OUTPUT)
             .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
             
-
-    // Function to safely write changes to file
-    public static void saveToFile(Path temporary, Path permanent, Account data) {
-        // XXX: The nested try-catch was created for fun, idk if its a good idea
-        try {
-            objectMapper.writeValue(temporary.toFile(), data); // write changes to temporary file
-            Files.move(temporary, permanent, StandardCopyOption.REPLACE_EXISTING); // replace temporary file name to permanent file name
-
-            System.out.println("Data successfully written to " + permanent.toAbsolutePath().toString());
-        } catch (NoSuchFileException e) {
-            System.err.println("[ERROR]: " + permanent + " does not exist");
-            System.out.println("[SYSTEM]: Attempting to recreate " + permanent);
-            try {
-                Files.createDirectories(permanent);
-                System.out.println("[SYSTEM]: " + permanent + " created. Please enter the information again.");
-            } catch (IOException innerE) {
-                System.err.println("[ERROR]: File cannot be created:\n" + e);
-            }
-        } catch (IOException e) {
-            System.err.println("[ERROR]: A file operation error has occured:\n" + e);
-        }
-    }
-    
     /**
      * 
      * loops through a given directory and returns an iterator containing the paths to the json files
@@ -66,15 +46,25 @@ public class Database {
         return null;
     }
 
-    /**
-     * Loads a Customer object from a JSON file.
-     * 
-     * @param filePath - The path to the JSON file containing customer data
-     * @return A Customer object deserialized from the file, or null if an error occurs
-     */
-    public static Customer loadCustomer(Path filePath) {
+    // Method to save an object of account
+    public static void save(Account data) {
+        Path permanent = objectFiles.get(data);
+        if (permanent == null) throw new IllegalStateException("Unknown object");
+        
+        Path temporary = permanent.resolveSibling(".tmp");
+        serialize(data, temporary, permanent);
+    }
+
+    // Method to load an object of account 
+    public static <T extends Account> T load(Path filePath, Class<T> account) {
+        T obj = deserialize(filePath, account);
+        if (obj != null) objectFiles.put(obj, filePath);
+        return obj;
+    }
+    
+    private static <T extends Account> T deserialize(Path filePath, Class<T> account) {
         try {
-            return objectMapper.readValue(filePath.toFile(), Customer.class);
+            return objectMapper.readValue(filePath.toFile(), account);
         } catch (Exception e) {
             e.printStackTrace();
         }  
@@ -82,36 +72,26 @@ public class Database {
         return null;
     }
 
-    /**
-     * Loads an Admin object from a JSON file.
-     * 
-     * @param filePath - The path to the JSON file containing admin data
-     * @return An Admin object deserialized from the file, or null if an error occurs
-     */
-    public static Admin loadAdmin(Path filePath) {
+    // Method to safely write changes to file
+    private static void serialize(Account data, Path temporary, Path permanent) {
+        // XXX: The nested try-catch was created for fun, idk if its a good idea
         try {
-            return objectMapper.readValue(filePath.toFile(), Admin.class);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }  
-        
-        return null;
-    }
+            objectMapper.writeValue(temporary.toFile(), data); // write changes to temporary file
+            Files.move(temporary, permanent, StandardCopyOption.REPLACE_EXISTING); // replace temporary file name to permanent file name
 
-    /**
-     * Loads a Pharmacy object from a JSON file.
-     * 
-     * @param filePath - The path to the JSON file containing pharmacy data
-     * @return A Pharmacy object deserialized from the file, or null if an error occurs
-     */
-    public static Pharmacy loadPharmacy(Path filePath) {
-        try {
-            return objectMapper.readValue(filePath.toFile(), Pharmacy.class);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }  
-        
-        return null;
+            System.out.println("Data successfully written to " + permanent.toAbsolutePath().toString());
+        } catch (NoSuchFileException e) {
+            System.err.println("[ERROR]: " + permanent + " does not exist");
+            System.out.println("[SYSTEM]: Attempting to recreate " + permanent);
+            try {
+                Files.createDirectories(permanent);
+                System.out.println("[SYSTEM]: " + permanent + " created. Please enter the information again.");
+            } catch (IOException innerE) {
+                System.err.println("[ERROR]: File cannot be created:\n" + e);
+            }
+        } catch (IOException e) {
+            System.err.println("[ERROR]: A file operation error has occured:\n" + e);
+        }
     }
 
     // Getter
