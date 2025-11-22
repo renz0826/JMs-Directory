@@ -136,7 +136,7 @@ class UIManager {
                 //s = new Customer("a", "b");
                 break;
             case 3:
-                //s = new Customer("a", "b");
+                customer.depositFunds();
                 break;
             case 4:
                 break;
