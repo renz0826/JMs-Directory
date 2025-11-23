@@ -25,23 +25,20 @@ public class AuthService {
     }
 
     public static Pharmacy logInPharmacy(String username, String password) {
-        clientFiles = Database.getJsonFilePaths(Database.getPharmaciesDatabasePath());
-
-        for (Path path : clientFiles) {
-            if (Files.isRegularFile(path)) {
-                Pharmacy pharmacy = Database.load(path, Pharmacy.class);
-                if (pharmacy == null) continue;
-
-                if (pharmacy.getUsername().equals(username) && pharmacy.getPassword().equals(password)) {
-                    System.out.println("Pharmacy authorized");
-                    return pharmacy;
-                }
-            }
-        }
+        Pharmacy pharmacy = Database.load(Database.getPharmacyFilePath(), Pharmacy.class);
         
-        // No credentials matched after traversing through pharmacies
-        System.out.println("Unauthorized");
-        return null;
+        if (pharmacy == null) {
+            System.out.println("Error occured");
+            return null;
+        }
+
+        if (pharmacy.getUsername().equals(username) && pharmacy.getPassword().equals(password)) {
+            System.out.println("Pharmacy authorized");
+            return pharmacy;
+        } else {
+            System.out.println("Unauthorized");
+            return null;
+        }
     }
 
     public static Customer logInCustomer(String username, String password) {

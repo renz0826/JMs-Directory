@@ -8,7 +8,6 @@ import com.fasterxml.jackson.databind.exc.MismatchedInputException;
 import java.io.IOException;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
-import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
@@ -18,7 +17,7 @@ import java.util.Map;
 
 public class Database {
     private static Path customersDatabasePath = Path.of("accounts", "customers");
-    private static Path pharmaciesDatabasePath = Path.of("accounts", "pharmacies");
+    private static Path pharmacyFilePath = Path.of("accounts", "JmPharmacy.json");
     private static Path adminFilePath = Path.of("accounts", "admin.json");
     private static Map<Account, Path> objectFiles = new HashMap<>();
     private static ObjectMapper objectMapper = new ObjectMapper()
@@ -60,10 +59,6 @@ public class Database {
 
     public static void createAccount(Customer data) {
         createFile(data, customersDatabasePath);
-    }
-
-    public static void createAccount(Pharmacy data) {
-        createFile(data, pharmaciesDatabasePath);
     }
 
     // Method to load an object of account 
@@ -140,7 +135,7 @@ public class Database {
     public static Path getAdminFilePath() {
         return adminFilePath;
     }
-    public static Path getPharmaciesDatabasePath() {
-        return pharmaciesDatabasePath;
+    public static Path getPharmacyFilePath() {
+        return pharmacyFilePath;
     }
 }
