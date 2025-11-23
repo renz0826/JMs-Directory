@@ -100,12 +100,16 @@ public class Pharmacy extends Account {
         return null;
     }
 
-    // Test methods
-    @Override
-    public void details() {
-        super.details();
-        for (Medicine medicine : medicines) {
-            medicine.details();
-        }
+    // Setters
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }
