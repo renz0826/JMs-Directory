@@ -33,7 +33,8 @@ public class Admin extends Account {
         List<Medicine> medicines = List.of();
 
         Customer newCustomer = new Customer(name, username, password, medicines, 0);
-        Database.createAccount(newCustomer);
+        Database.createCustomer(newCustomer);
+        loadCustomers(); // refresh the list so the new accounts are included
     }
 
     // Method to create a new pharmacy account
