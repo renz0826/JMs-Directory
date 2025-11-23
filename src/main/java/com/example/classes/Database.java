@@ -33,10 +33,10 @@ public class Database {
      * @return 
      *  - A DirectoryStream<Path> iterator of the json files, or null if an error occurs
      */ 
-    public static List<Path> getJsonFilePaths(Path directory) {
+    public static List<Path> getCustomerJsonFileList() {
         List<Path> paths = new ArrayList<>();
 
-        try (DirectoryStream<Path> stream = Files.newDirectoryStream(directory, "*.json")) {
+        try (DirectoryStream<Path> stream = Files.newDirectoryStream(customersDatabasePath, "*.json")) {
             for (Path path : stream) {
                 paths.add(path);
             };
@@ -57,7 +57,7 @@ public class Database {
         serialize(data, path);
     }
 
-    public static void createAccount(Customer data) {
+    public static void createCustomer(Customer data) {
         createFile(data, customersDatabasePath);
     }
 

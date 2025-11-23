@@ -5,7 +5,7 @@ import java.nio.file.Path;
 import java.util.List;
 
 public class AuthService {
-    private static List<Path> clientFiles;
+    private static List<Path> customerFiles;
 
     public static Admin logInAdmin(String username, String password) {
         Admin admin = Database.load(Database.getAdminFilePath(), Admin.class);
@@ -42,9 +42,9 @@ public class AuthService {
     }
 
     public static Customer logInCustomer(String username, String password) {
-        clientFiles = Database.getJsonFilePaths(Database.getCustomersDatabasePath());
+        customerFiles = Database.getCustomerJsonFileList();
         Customer customer;
-        for (Path path : clientFiles) {
+        for (Path path : customerFiles) {
             if (Files.isRegularFile(path)) {
                 customer = Database.load(path, Customer.class);
                 if (customer == null) {
