@@ -277,7 +277,28 @@ class UIManager {
         }
     }
 
-    public static void displayData(Account account) {};
+    private static void displayCustomerTable(List<Customer> accounts) {
+        asciiTable = new AsciiTable();
+
+        // Header
+        asciiTable.addRule();
+        asciiTable.addRow("Position #", "Name", "Username", "Password", "Funds");
+        asciiTable.addRule();
+
+        int indexCounter = 0;
+        for (Customer customer : accounts) {
+            asciiTable.addRow(
+                indexCounter, customer.getName(), customer.getUsername(), 
+                customer.getPassword(), customer.getFunds()
+            );
+            asciiTable.addRule();
+            indexCounter++;
+        }
+
+        // Render and print table to console
+        String rend = asciiTable.render();
+        System.out.println(rend);
+    }
 
     private static void displayMedicineTable(List<Medicine> medicines) {
         asciiTable = new AsciiTable();
