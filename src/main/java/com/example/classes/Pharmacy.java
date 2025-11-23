@@ -56,7 +56,8 @@ public class Pharmacy extends Account {
         if (matched.isEmpty()) return null;
         return matched;
     }
-
+    
+    // Method to update medicine amount
     public void updateMedicineAmount(String targetName, int amount) {
         Medicine medicine = getMedicine(targetName);
 
@@ -67,6 +68,7 @@ public class Pharmacy extends Account {
         Database.save(this);
     }
 
+    // Method to update medicine price
     public void updateMedicinePrice(String targetName, double amount) {
         Medicine medicine = getMedicine(targetName);
 
@@ -75,7 +77,12 @@ public class Pharmacy extends Account {
         Database.save(this);
     }
 
-    public void deleteMedicine() {}
+    // Method to delete a medicine from list
+    public void deleteMedicine(String targetName) {
+        Medicine medicine = getMedicine(targetName);
+        medicines.remove(medicine);
+        Database.save(this);
+    }
 
     // Getters
     public List<Medicine> getMedicines() {
@@ -85,7 +92,7 @@ public class Pharmacy extends Account {
     // returns the medicine that matches the targetName
     public Medicine getMedicine(String targetName) {
         for (Medicine medicine : medicines) {
-            if (medicine.getName().toLowerCase().equals(targetName.toLowerCase())) {
+            if (medicine.getName().equalsIgnoreCase(targetName)) {
                 return medicine;
             }
         }

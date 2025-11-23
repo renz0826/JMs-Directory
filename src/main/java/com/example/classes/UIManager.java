@@ -173,10 +173,8 @@ class UIManager {
                         }
                     } while (true);
                 }
-                case 3, 4 -> {
+                case 3, 4, 5 -> {
                     List<Medicine> medicines = pharmacy.getMedicines();
-                    // for matching strings representing a double number
-                    String realDoublePattern = "-?(\\d*\\.\\d+|\\d+\\.\\d*)"; 
 
                     do {
                         displayData(medicines, true);
@@ -190,16 +188,16 @@ class UIManager {
                         // exit if quit
                         if (input.equalsIgnoreCase("q")) break;
 
-                        // do not allow double
-                        if (input.matches(realDoublePattern)) {
+                        // do not allow double for position
+                        String doublePattern = "-?(\\d*\\.\\d+|\\d+\\.\\d*)"; 
+                        if (input.matches(doublePattern)) {
                             System.out.println("[ERROR]: Enter a valid position");
                             continue;
                         }
                         
+                        // if number then select medicine, else search
                         int pos = 0;
                         String targetName;
-
-                        // if number then select medicine, else search
                         try {
                             pos = Integer.parseInt(input);
                             targetName = medicines.get(pos).getName();
@@ -217,14 +215,17 @@ class UIManager {
                             int amount = InputHandler.readInt("Enter amount: ", true);
                             pharmacy.updateMedicineAmount(targetName, amount); 
                         }
-                        else { 
+                        else if (choice == 4) { 
                             double amount = InputHandler.readDouble("Enter new price: ");
                             pharmacy.updateMedicinePrice(targetName, amount); 
+                        } else {
+                            System.out.println("Are you sure you want to delete " + targetName + "?");
+                            String confirmation = InputHandler.readNonEmptyLine("(y/n): ");
+                            if (confirmation.equalsIgnoreCase("y")) { pharmacy.deleteMedicine(targetName); }
+                            medicines = pharmacy.getMedicines(); // update list
                         }
-
                     } while (true);
                 }
-                case 5 -> pharmacy.deleteMedicine();
                 case 0 -> {
                     System.out.println("\nExiting...");
                     running = false;
