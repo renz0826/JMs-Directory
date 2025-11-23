@@ -52,11 +52,18 @@ public class Database {
 
     // Method to save an object of account
     public static void save(Account data) {
-        Path permanent = objectFiles.get(data);
-        if (permanent == null) throw new IllegalStateException("Unknown object");
+        Path path = objectFiles.get(data);
+        if (path == null) throw new IllegalStateException("Unknown object");
         
-        Path temporary = permanent.resolveSibling(".tmp");
-        serialize(data, temporary, permanent);
+        serialize(data, path);
+    }
+
+    public static void createAccount(Customer data) {
+        createFile(data, customersDatabasePath);
+    }
+
+    public static void createAccount(Pharmacy data) {
+        createFile(data, pharmaciesDatabasePath);
     }
 
     // Method to load an object of account 
@@ -65,7 +72,8 @@ public class Database {
         if (obj != null) objectFiles.put(obj, filePath);
         return obj;
     }
-    
+
+    // Method to load JSON data to object
     private static <T extends Account> T deserialize(Path filePath, Class<T> account) {
         try {
             return objectMapper.readValue(filePath.toFile(), account);
