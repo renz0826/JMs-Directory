@@ -50,13 +50,33 @@ public class Admin extends Account {
         if (matched.isEmpty()) return null;
         return matched;
     }
+
+    // UPDATE
+    public void updateCustomerDetails(String targetName) {
+        Customer customer = getCustomer(targetName);
+
+        System.out.println("Enter New Customer details.");
         String name = InputHandler.readInput("Name: ");
         String username = InputHandler.readInput("Username: ");
         String password = InputHandler.readInput("Password: ");
-        List<Medicine> medicines = List.of();
 
-        Pharmacy newPharmacy = new Pharmacy(name, username, password, medicines);
-        Database.createAccount(newPharmacy);
+
+        Database.save(customer);
+    }
+
+    public void updatePharamacyDetails() {
+        System.out.println("Enter New Pharmacy details.");
+        String name = InputHandler.readInput("Name: ");
+        String username = InputHandler.readInput("Username: ");
+        String password = InputHandler.readInput("Password: ");
+
+        pharmacy.setName(name);
+        pharmacy.setUsername(username);
+        pharmacy.setPassword(password);
+
+        Database.save(pharmacy);
+    }
+
     // DELETE
     public void deleteCustomer(String targetName) {
         Customer customer = getCustomer(targetName);
