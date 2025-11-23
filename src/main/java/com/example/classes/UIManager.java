@@ -239,14 +239,12 @@ class UIManager {
                 |               + Admin Menu +               |
                 ==============================================
                 |                                            |
-                |   1. Add Customer                          |
-                |   2. Add Pharmacy                          |
-                |   3. View Customer                         |
-                |   4. View Pharmacy                         |
-                |   5. Edit Customer                         |
-                |   6. Edit Pharmacy                         |
-                |   7. Delete Customer                       |
-                |   8. Delete Pharmacy                       |
+                |   1. Register a customer                   |
+                |   2. Show list of customers                |
+                |   3. View pharmacy details                 |
+                |   4. Edit customer credentials             |
+                |   5. Edit pharmacy credentials             |
+                |   6. Delete customer                       |
                 |                                            |
                 |   0. Logout                                |
                 |                                            |
