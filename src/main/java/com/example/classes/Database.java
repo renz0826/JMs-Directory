@@ -1,10 +1,5 @@
 package com.example.classes;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.databind.exc.MismatchedInputException;
-
 import java.io.IOException;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
@@ -16,21 +11,27 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.exc.MismatchedInputException;
+
 public class Database {
+
     private static Map<Account, Path> objectFiles = new HashMap<>();
     private static ObjectMapper objectMapper = new ObjectMapper()
             .enable(SerializationFeature.INDENT_OUTPUT)
             .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-            
+
     /**
-     * 
-     * loops through a given directory and returns an iterator containing the paths to the json files
-     * within the given directory
-     * 
-     * @param directory - A directory storing json files 
-     * @return 
-     *  - A DirectoryStream<Path> iterator of the json files, or null if an error occurs
-     */ 
+     *
+     * loops through a given directory and returns an iterator containing the
+     * paths to the json files within the given directory
+     *
+     * @param directory - A directory storing json files
+     * @return - A DirectoryStream<Path> iterator of the json files, or null if
+     * an error occurs
+     */
     public static List<Path> getJsonFilePaths(Path directory) {
         List<Path> paths = new ArrayList<>();
 
@@ -50,8 +51,10 @@ public class Database {
     // Method to save an object of account
     public static void save(Account data) {
         Path permanent = objectFiles.get(data);
-        if (permanent == null) throw new IllegalStateException("Unknown object");
-        
+        if (permanent == null) {
+            throw new IllegalStateException("Unknown object");
+        }
+
         Path temporary = permanent.resolveSibling(".tmp");
         serialize(data, temporary, permanent);
     }
@@ -59,10 +62,25 @@ public class Database {
     // Method to load an object of account 
     public static <T extends Account> T load(Path filePath, Class<T> account) {
         T obj = deserialize(filePath, account);
-        if (obj != null) objectFiles.put(obj, filePath);
+        if (obj != null) {
+            objectFiles.put(obj, filePath);
+        }
         return obj;
     }
-    
+
+    /**
+     * Loads a specific Pharmacy object based on its filename. Assumes the file
+     * is located in the 'pharmacies' subdirectory.
+     *
+     * @param fileName The name of the pharmacy file (e.g., "JmPharmacy.json").
+     * @return The loaded Pharmacy object, or null if loading fails.
+     */
+    public static Pharmacy loadJmPharmacy(String fileName) {
+        // NOTE: Account.ROOT_DIRECTORY must be accessible/defined for this to work.
+        Path filePath = Path.of(Account.ROOT_DIRECTORY, "pharmacies", fileName);
+        return load(filePath, Pharmacy.class);
+    }
+
     private static <T extends Account> T deserialize(Path filePath, Class<T> account) {
         try {
             return objectMapper.readValue(filePath.toFile(), account);
