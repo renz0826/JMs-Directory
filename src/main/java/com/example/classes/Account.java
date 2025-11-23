@@ -5,7 +5,6 @@ public class Account{
     // Sets username and password's max size to 128 characters
     final protected int MAX_USERNAME_SIZE = 128;
     final protected int MAX_PASSWORD_SIZE = 128;
-    final protected static String ROOT_DIRECTORY = "accounts";
 
     protected String name;
     protected String username;

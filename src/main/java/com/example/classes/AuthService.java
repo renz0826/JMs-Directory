@@ -5,13 +5,10 @@ import java.nio.file.Path;
 import java.util.List;
 
 public class AuthService {
-    private static Path customersDatabasePath = Path.of("accounts", "customers");
-    private static Path pharmaciesDatabasePath = Path.of("accounts", "pharmacies");
-    private static Path adminFilePath = Path.of("accounts", "admin.json");
-    private static List<Path> clientFiles;
+    private static List<Path> customerFiles;
 
     public static Admin logInAdmin(String username, String password) {
-        Admin admin = Database.load(adminFilePath, Admin.class);
+        Admin admin = Database.load(Database.getAdminFilePath(), Admin.class);
         
         if (admin == null) {
             System.out.println("Error occured");
@@ -28,29 +25,26 @@ public class AuthService {
     }
 
     public static Pharmacy logInPharmacy(String username, String password) {
-        clientFiles = Database.getJsonFilePaths(pharmaciesDatabasePath);
-
-        for (Path path : clientFiles) {
-            if (Files.isRegularFile(path)) {
-                Pharmacy pharmacy = Database.load(path, Pharmacy.class);
-                if (pharmacy == null) continue;
-
-                if (pharmacy.getUsername().equals(username) && pharmacy.getPassword().equals(password)) {
-                    System.out.println("Pharmacy authorized");
-                    return pharmacy;
-                }
-            }
-        }
+        Pharmacy pharmacy = Database.load(Database.getPharmacyFilePath(), Pharmacy.class);
         
-        // No credentials matched after traversing through pharmacies
-        System.out.println("Unauthorized");
-        return null;
+        if (pharmacy == null) {
+            System.out.println("Error occured");
+            return null;
+        }
+
+        if (pharmacy.getUsername().equals(username) && pharmacy.getPassword().equals(password)) {
+            System.out.println("Pharmacy authorized");
+            return pharmacy;
+        } else {
+            System.out.println("Unauthorized");
+            return null;
+        }
     }
 
     public static Customer logInCustomer(String username, String password) {
-        clientFiles = Database.getJsonFilePaths(customersDatabasePath);
+        customerFiles = Database.getCustomerJsonFileList();
         Customer customer;
-        for (Path path : clientFiles) {
+        for (Path path : customerFiles) {
             if (Files.isRegularFile(path)) {
                 customer = Database.load(path, Customer.class);
                 if (customer == null) {

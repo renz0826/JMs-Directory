@@ -3,7 +3,6 @@ package com.example.classes;
 import java.io.IOException;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
-import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
@@ -17,25 +16,27 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.exc.MismatchedInputException;
 
 public class Database {
-
+    private static Path customersDatabasePath = Path.of("accounts", "customers");
+    private static Path pharmacyFilePath = Path.of("accounts", "JmPharmacy.json");
+    private static Path adminFilePath = Path.of("accounts", "admin.json");
     private static Map<Account, Path> objectFiles = new HashMap<>();
     private static ObjectMapper objectMapper = new ObjectMapper()
             .enable(SerializationFeature.INDENT_OUTPUT)
             .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
 
     /**
-     *
-     * loops through a given directory and returns an iterator containing the
-     * paths to the json files within the given directory
-     *
-     * @param directory - A directory storing json files
-     * @return - A DirectoryStream<Path> iterator of the json files, or null if
-     * an error occurs
-     */
-    public static List<Path> getJsonFilePaths(Path directory) {
+     * 
+     * loops through a given directory and returns an iterator containing the paths to the json files
+     * within the given directory
+     * 
+     * @param directory - A directory storing json files 
+     * @return 
+     *  - A DirectoryStream<Path> iterator of the json files, or null if an error occurs
+     */ 
+    public static List<Path> getCustomerJsonFileList() {
         List<Path> paths = new ArrayList<>();
 
-        try (DirectoryStream<Path> stream = Files.newDirectoryStream(directory, "*.json")) {
+        try (DirectoryStream<Path> stream = Files.newDirectoryStream(customersDatabasePath, "*.json")) {
             for (Path path : stream) {
                 paths.add(path);
             };
@@ -50,13 +51,29 @@ public class Database {
 
     // Method to save an object of account
     public static void save(Account data) {
-        Path permanent = objectFiles.get(data);
-        if (permanent == null) {
-            throw new IllegalStateException("Unknown object");
+        Path path = objectFiles.get(data);
+        if (path == null) throw new IllegalStateException("Unknown object");
+        
+        serialize(data, path);
+    }
+
+    public static void delete(Customer customer) {
+        Path file = objectFiles.get(customer);
+        if (file == null) throw new IllegalStateException("Unknown object");
+
+        // file may already be gone
+        try {
+            Files.deleteIfExists(file);
+        } catch (IOException e) {
+            System.err.println("[ERROR]: File operation occured.");
         }
 
-        Path temporary = permanent.resolveSibling(".tmp");
-        serialize(data, temporary, permanent);
+        // remove tracking either way
+        objectFiles.remove(customer);
+    }
+
+    public static void createCustomer(Customer data) {
+        createFile(data, customersDatabasePath);
     }
 
     // Method to load an object of account 
@@ -68,19 +85,7 @@ public class Database {
         return obj;
     }
 
-    /**
-     * Loads a specific Pharmacy object based on its filename. Assumes the file
-     * is located in the 'pharmacies' subdirectory.
-     *
-     * @param fileName The name of the pharmacy file (e.g., "JmPharmacy.json").
-     * @return The loaded Pharmacy object, or null if loading fails.
-     */
-    public static Pharmacy loadJmPharmacy(String fileName) {
-        // NOTE: Account.ROOT_DIRECTORY must be accessible/defined for this to work.
-        Path filePath = Path.of(Account.ROOT_DIRECTORY, "pharmacies", fileName);
-        return load(filePath, Pharmacy.class);
-    }
-
+    // Method to load JSON data to object
     private static <T extends Account> T deserialize(Path filePath, Class<T> account) {
         try {
             return objectMapper.readValue(filePath.toFile(), account);
@@ -94,29 +99,60 @@ public class Database {
     }
 
     // Method to safely write changes to file
-    private static void serialize(Account data, Path temporary, Path permanent) {
-        // XXX: The nested try-catch was created for fun, idk if its a good idea
-        try {
-            objectMapper.writeValue(temporary.toFile(), data); // write changes to temporary file
-            Files.move(temporary, permanent, StandardCopyOption.REPLACE_EXISTING); // replace temporary file name to permanent file name
+    private static void serialize(Account data, Path permanent) {
+        Path temporary = permanent.resolveSibling(".tmp");
 
-            System.out.println("Data successfully written to " + permanent.toAbsolutePath().toString());
-        } catch (NoSuchFileException e) {
-            System.err.println("[ERROR]: " + permanent + " does not exist");
-            System.out.println("[SYSTEM]: Attempting to recreate " + permanent);
-            try {
-                Files.createDirectories(permanent);
-                System.out.println("[SYSTEM]: " + permanent + " created. Please enter the information again.");
-            } catch (IOException innerE) {
-                System.err.println("[ERROR]: File cannot be created:\n" + e);
+        try {
+            // Ensure directory exists
+            if (permanent.getParent() != null)
+                Files.createDirectories(permanent.getParent());
+
+            boolean exists = Files.exists(permanent);
+
+            if (exists) {
+                // SAFE UPDATE: temp + atomic move
+                objectMapper.writeValue(temporary.toFile(), data);
+                Files.move(temporary, permanent, StandardCopyOption.REPLACE_EXISTING);
+            } else {
+                // NEW FILE: write directly
+                objectMapper.writeValue(permanent.toFile(), data);
             }
+
+            System.out.println("Data successfully written to " + permanent.toAbsolutePath());
+
         } catch (IOException e) {
-            System.err.println("[ERROR]: A file operation error has occured:\n" + e);
+            System.err.println("[ERROR]: Failed to write file:\n" + e);
+            try { Files.deleteIfExists(temporary); } catch (IOException ignored) {}
         }
     }
 
-    // Getter
+    private static <T extends Account> void createFile(T data, Path basePath) {
+        Path path = basePath.resolve(data.getName() + ".json");
+
+        if (Files.exists(path)) {
+            System.err.println("[ERROR]: " + path + " already exists!");
+            return;
+        }
+
+        try {
+            Files.createFile(path);
+            serialize(data, path);
+        } catch (IOException e) {
+            System.err.println("[ERROR]: Cannot create " + path);
+        }
+    }
+
+    // Getters
     public static ObjectMapper getObjectMapper() {
         return objectMapper;
+    }
+    public static Path getCustomersDatabasePath() {
+        return customersDatabasePath;
+    }
+    public static Path getAdminFilePath() {
+        return adminFilePath;
+    }
+    public static Path getPharmacyFilePath() {
+        return pharmacyFilePath;
     }
 }

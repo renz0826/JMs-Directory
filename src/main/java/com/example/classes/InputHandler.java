@@ -68,20 +68,24 @@ public class InputHandler {
      * @param prompt the message displayed to the user before reading input
      * @return a trimmed, non-empty string entered by the user
      */
-    public static String readNonEmptyLine(String prompt) {
+    public static String readInput(String prompt, boolean allowEmpty) {
         String input;
 
         while (true) {
             System.out.print(prompt);
             input = SCAN.nextLine();
-
-            if (input.isEmpty()) {
-                System.err.println("[ERROR]: Input cannot be empty");
+        
+            if (input.isEmpty() && !allowEmpty) {
+                System.err.println("[ERROR]: Input cannot be empty");    
                 continue;
             }
             input = input.trim();
             return input;
         }
+    }
+
+    public static String readInput(String prompt) {
+        return readInput(prompt, false);
     }
 
     /**
@@ -103,7 +107,7 @@ public class InputHandler {
         int i;
 
         while (true) {
-            input = readNonEmptyLine(prompt);
+            input = readInput(prompt);
 
             try {
                 i = Integer.parseInt(input);
@@ -144,7 +148,7 @@ public class InputHandler {
         double d;
 
         while (true) {
-            input = readNonEmptyLine(prompt);
+            input = readInput(prompt);
 
             try {
                 d = Double.parseDouble(input);
@@ -181,7 +185,7 @@ public class InputHandler {
         DateTimeFormatter format = DateTimeFormatter.ofPattern("d/M/yyyy");
 
         while (true) {
-            input = readNonEmptyLine(prompt);
+            input = readInput(prompt);
 
             try {
                 date = LocalDate.parse(input, format);

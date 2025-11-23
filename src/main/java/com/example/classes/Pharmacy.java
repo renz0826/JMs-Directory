@@ -26,12 +26,12 @@ public class Pharmacy extends Account {
     public void addMedicine() {
         // Prompt line and Input validation
         System.out.println("Enter medicine details.");
-        String name = InputHandler.readNonEmptyLine("Name: ");
+        String name = InputHandler.readInput("Name: ");
         double price = InputHandler.readDouble("Price (PHP): ");
         int amount = InputHandler.readInt("Initial amount: ");
         String expirationDate = InputHandler.readDate("Expiration Date (d/m/yyyy): ");
-        String brand = InputHandler.readNonEmptyLine("Brand: ");
-        String purpose = InputHandler.readNonEmptyLine("Purpose: ");
+        String brand = InputHandler.readInput("Brand: ");
+        String purpose = InputHandler.readInput("Purpose: ");
 
         // Save sanitized inputs to database
         Medicine newMedicine = new Medicine(name, brand, purpose, expirationDate, amount, price);
@@ -100,12 +100,16 @@ public class Pharmacy extends Account {
         return null;
     }
 
-    // Test methods
-    @Override
-    public void details() {
-        super.details();
-        for (Medicine medicine : medicines) {
-            medicine.details();
-        }
+    // Setters
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

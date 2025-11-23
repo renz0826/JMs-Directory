@@ -1,0 +1,20 @@
+{
+  "name" : "JohnMark",
+  "username" : "jmp",
+  "password" : "panganib",
+  "medicines" : [ {
+    "name" : "Paracetamol",
+    "brand" : "Biogesic",
+    "purpose" : "Pain relief and fever reduction",
+    "expirationDate" : "15/12/2025",
+    "amount" : 200,
+    "price" : 5.5
+  }, {
+    "name" : "Amoxicillin",
+    "brand" : "Amoxil",
+    "purpose" : "Antibiotic for bacterial infections",
+    "expirationDate" : "20/6/2026",
+    "amount" : 50,
+    "price" : 12.0
+  } ]
+}
