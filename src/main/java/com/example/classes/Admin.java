@@ -1,5 +1,8 @@
 package com.example.classes;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -7,7 +10,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Admin extends Account {
     private List<Customer> customers;
-    private List<Pharmacy> pharmacies;
+    private Pharmacy pharmacy;
     
     @JsonCreator
     Admin(
@@ -15,6 +18,9 @@ public class Admin extends Account {
         @JsonProperty("username") String username,
         @JsonProperty("password") String password) {
         super(name, username, password);
+
+        loadCustomers();
+        pharmacy = Database.load(Database.getPharmacyFilePath(), Pharmacy.class);
     }
 
     // CREATE
@@ -40,5 +46,12 @@ public class Admin extends Account {
 
         Pharmacy newPharmacy = new Pharmacy(name, username, password, medicines);
         Database.createAccount(newPharmacy);
+    private void loadCustomers() {
+        customers = new ArrayList<>();
+
+        for (Path path : Database.getCustomerJsonFileList()) {
+            Customer customer = Database.load(path, Customer.class);
+            customers.add(customer);
+        }
     }
 }
