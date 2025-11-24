@@ -166,29 +166,7 @@ class UIManager {
 
             switch (choice) {
                 case 1 -> customer.buyMedicine();
-                // {
-                    
-                //     boolean stayingInAddMenu = true;
-                //     while (stayingInAddMenu) {
-
-                //         // 1. Perform the action FIRST
-                //         // 2. Then ask what to do next
-                //         // UIManager.clear();
-                //         // asciiTable = new AsciiTable();
-                //         // asciiTable.addRule();
-                //         // asciiTable.addRow("Would you like to buy another medicine? (y/n)");
-                //         // asciiTable.addRule();
-                //         // asciiTable.setTextAlignment(TextAlignment.CENTER);
-                //         // System.out.println(asciiTable.render());
-
-                //         // if (InputHandler.promptYesOrNo()) continue;
-                //         // else break;
-                //     }
-                // }
-                case 2 -> {
-                    customer.viewAccountDetails();
-                    UIManager.displayCustomerMenu(customer);
-                }
+                case 2 -> customer.viewAccountDetails();
                 case 3 -> {
                     boolean stayingInAddMenu = true;
                     while (stayingInAddMenu) {
