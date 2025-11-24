@@ -59,6 +59,8 @@ public class Customer extends Account {
         cell.getContext().setTextAlignment(TextAlignment.LEFT);
         at.addRule();
         String rend = at.render();
+        
+        // 3. Render the prompt table and start point of the operation
         System.out.println(rend);
 
         List<Medicine> currentDisplayList = targetPharmacy.getMedicines();
@@ -139,7 +141,6 @@ public class Customer extends Account {
                         Database.save(this);
 
                         System.out.println("\n[SUCCESS]: Purchased.");
-                        break;
                     }
                 } else {
                     System.out.println("\n[ERROR]: Invalid position.");
@@ -153,10 +154,8 @@ public class Customer extends Account {
                     currentDisplayList = searchResult;
                 }
             }
-        } while (true);
 
-        // Display after buying 
-        do {
+            // Display after buying 
             UIManager.clear();
             at = new AsciiTable();
             at.addRule();
@@ -168,7 +167,6 @@ public class Customer extends Account {
             if (InputHandler.promptYesOrNo()) continue;
             else break;
         } while (true);
-
     }
 
     public void viewAccountDetails() {
