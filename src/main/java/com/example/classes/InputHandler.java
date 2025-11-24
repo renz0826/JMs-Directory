@@ -16,7 +16,7 @@ public class InputHandler {
         int choice;
 
         while (true) {
-            String input = readNonEmptyLine("\nEnter Choice >> ");
+            String input = readInput("\nEnter Choice >> ");
 
             // Validate inputs
             try {

@@ -71,17 +71,7 @@ public class Customer extends Account {
 
             UIManager.buyMedicineUI();
 
-            // 1. Load the specific Pharmacy instance
-            Pharmacy targetPharmacy = Database.loadJmPharmacy("JmPharmacy.json");
-
-            if (targetPharmacy == null) {
-                System.err.println("[ERROR]: Failed to load Jm Pharmacy data.");
-                return;
-            }
-
-            List<Medicine> currentDisplayList = targetPharmacy.getMedicines();
-
-            UIManager.displayData(currentDisplayList, true);
+            UIManager.displayMedicineTable(currentDisplayList);
             System.out.println("\n--- Current Balance: Php " + getFunds() + " ---");
 
             System.out.println("\nInstructions: ");
@@ -235,10 +225,7 @@ public class Customer extends Account {
 
         // Pause
         System.out.print("\n(Press Enter to return to menu)");
-        try {
-            System.in.read();
-        } catch (Exception e) {
-        }
+        InputHandler.readInput("", true);
     }
 
     public void depositFunds() {

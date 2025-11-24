@@ -292,7 +292,7 @@ class UIManager {
                     while (stayingInAddMenu) {
 
                         // 1. Perform the action FIRST
-                        //pharmacy.addMedicine();
+                        pharmacy.addMedicine();
                         // 2. Then ask what to do next
                         UIManager.clear();
                         asciiTable = new AsciiTable();
