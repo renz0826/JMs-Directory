@@ -473,10 +473,10 @@ class UIManager {
                 }
                 case 0 -> {
                     System.out.println("\nExiting...");
-                    running = false;
+                    break;
                 }
             }
-        } while (running);
+        } while (true);
     }
 
     private static void displayCustomerTable(List<Customer> accounts) {
