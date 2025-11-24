@@ -157,16 +157,23 @@ public class InputHandler {
      * @return a date string in {@code d/M/yyyy} format entered by the user
      * @see #readNonEmptyLine(String)
      */
-    public static String readDate(String prompt) {
+    public static String readMedicineDate(String prompt) {
         String input;
-        LocalDate date;
+        LocalDate today = LocalDate.now();
         DateTimeFormatter format = DateTimeFormatter.ofPattern("d/M/yyyy");
 
         while (true) {
             input = readInput(prompt);
 
             try {
-                date = LocalDate.parse(input, format);
+                LocalDate date = LocalDate.parse(input, format);
+
+                // If the date given is before or equal to today then reject it and prompt the user again
+                if (date.isEqual(today) || date.isBefore(today)) {
+                    System.err.println("\n[ERROR]: Medicine is already expired.");
+                    continue;
+                }
+
                 return date.format(format);
             } catch (DateTimeParseException e) {
                 System.err.println("\n[ERROR]: Incorrect date format. Use d/M/yyyy");

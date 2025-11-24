@@ -29,7 +29,7 @@ public class Pharmacy extends Account {
         String name = InputHandler.readInput("Name: ");
         double price = InputHandler.readDouble("Price (PHP): ");
         int amount = InputHandler.readInt("Initial amount: ");
-        String expirationDate = InputHandler.readDate("Expiration Date (d/m/yyyy): ");
+        String expirationDate = InputHandler.readMedicineDate("Expiration Date (d/m/yyyy): ");
         String brand = InputHandler.readInput("Brand: ");
         String purpose = InputHandler.readInput("Purpose: ");
 
