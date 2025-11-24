@@ -401,18 +401,22 @@ class UIManager {
                 case 2 -> {
                     List<Customer> customers = admin.getCustomers();
                     
-                    // display once
-                    displayCustomerTable(customers);
                     do {
+                        // display once
+                        displayCustomerTable(customers);
+                        ErrorMessage.displayNext();
+
                         System.out.println("Search customer by name or enter 'q' to exit.");
                         String targetName = InputHandler.readInput("Enter >> ");
                         if (targetName.equalsIgnoreCase("q")) break;
-                        customers = admin.searchCustomer(targetName);
+                        List<Customer> found = admin.searchCustomer(targetName);
 
-                        if (customers == null) {
-                            System.out.println("No results found");
+                        if (found == null) {
+                            ErrorMessage.queueMessage("\n[SUCCESS]: No results found.");
+                            customers = admin.getCustomers();
                         } else {
-                            displayCustomerTable(customers);
+                            ErrorMessage.queueMessage("\n[SUCCESS]: Returned " + found.size() + " results.");
+                            customers = found;
                         }
                     } while (true);
                 }
@@ -422,6 +426,7 @@ class UIManager {
 
                     do {
                         displayCustomerTable(customers);
+                        ErrorMessage.displayNext();
 
                         System.out.println("Instructions: ");
                         System.out.println("- Select a customer by entering its position number.");
@@ -446,12 +451,12 @@ class UIManager {
                             pos = Integer.parseInt(input);
                             targetName = customers.get(pos).getName();
                         } catch (NumberFormatException e) {
-                            List<Customer> result = admin.searchCustomer(input);
-                            if (result == null) { 
+                            List<Customer> found = admin.searchCustomer(input);
+                            if (found == null) { 
                                 ErrorMessage.queueMessage("\n[SUCCESS]: No results found."); 
                                 customers = admin.getCustomers(); // reset the table
                             }
-                            else { customers = result; }
+                            else { customers = found; }
                             continue;
                         } catch (IndexOutOfBoundsException e) {
                             ErrorMessage.queueMessage("\n[ERROR]: Invalid Position.");
@@ -467,9 +472,7 @@ class UIManager {
                         }
                     } while (true);
                 }
-                case 4 -> {
-                    admin.updatePharamacyDetails();
-                }
+                case 4 -> admin.updatePharamacyDetails();
                 case 0 -> {
                     System.out.println("\nExiting...");
                     break;
