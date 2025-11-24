@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ErrorMessage {
+    // NOTE: Consider refactoring this into a Queue if message priority is truly necessary
     private static List<String> errorMessages = new ArrayList<>();
 
     // Method to add an error message
@@ -16,10 +17,14 @@ public class ErrorMessage {
     // Method to display error messages and clears it from the list
     public static void displayAll() {
         if (!errorMessages.isEmpty()) {
+            List<String> toRemove = new ArrayList<>();
+
             for (String message : errorMessages) {
                 System.err.println(message);
-                errorMessages.remove(message);
+                toRemove.add(message);
             }
+
+            errorMessages.removeAll(toRemove);
         }
     }
 
