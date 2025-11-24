@@ -8,14 +8,21 @@ public class ErrorMessage {
     // NOTE: Consider refactoring this into a Queue if message priority is truly necessary
     private static List<String> errorMessages = new ArrayList<>();
 
-    // Method to add an error message
+    /**
+     * Method to add an error message to message List
+     * 
+     * @param message the error message to add
+     */
     public static void queueMessage(String message) {
         if (!message.isEmpty()) {
             errorMessages.add(message);
         }
     }
 
-    // Method to display error messages and clears it from the list
+    /**
+     * Method to display all error messages and clears the list
+     * 
+     */
     public static void displayAll() {
         if (!errorMessages.isEmpty()) {
             List<String> toRemove = new ArrayList<>();
@@ -29,7 +36,10 @@ public class ErrorMessage {
         }
     }
 
-    // Method to display the next error message and removes it immediately
+    /**
+     * Method to display the next error message and removes it immediately
+     * 
+     */
     public static void displayNext() {
         if (!errorMessages.isEmpty()) {
             String next = errorMessages.getFirst();
@@ -38,9 +48,10 @@ public class ErrorMessage {
         }
     }
 
-    // Method to display a given message using System.err.out
-    // ONLY USE THIS FOR ERROR MESSAGES
-    // Does not store the message in the list
+    /**
+     * Method to display a given message using System.err.out without storing it in the list
+     * 
+     */
     public static void display(String errorMessage) {
         System.err.println(errorMessage);
     }
