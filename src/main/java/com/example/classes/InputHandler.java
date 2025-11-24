@@ -63,10 +63,13 @@ public class InputHandler {
         }
     }
 
+    /**
+     * @see #readInput(String, boolean)
+     */
     public static String readInput(String prompt) {
         return readInput(prompt, false);
     }
-
+    
     /**
      * Reads an integer from the user.
      *
@@ -104,6 +107,9 @@ public class InputHandler {
         }
     }
 
+    /**
+     * @see #readInt(String, boolean)
+     */
     public static int readInt(String prompt) {
         return readInt(prompt, false);
     }
