@@ -72,7 +72,7 @@ public class Customer extends Account {
             System.out.println("- Search medicine by name or enter 'q' to exit.");
             String input = InputHandler.readInput("\nEnter input: >> ");
 
-            if (input.equalsIgnoreCase("q")) break;
+            if (input.equalsIgnoreCase("q")) return;
 
             try {
                 int pos = Integer.parseInt(input);
