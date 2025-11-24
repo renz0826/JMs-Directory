@@ -181,6 +181,22 @@ public class InputHandler {
         }
     }
 
+
+    /**
+     * Method to prompt the user (y/n) input and compares against those characters (case-insensitive).
+     * Valid inputs are either Y or N.
+     * 
+     * @return true if y, false if n
+     */
+    public static boolean promptYesOrNo() {
+        do {
+            String confirmation = readInput("(y/n) >> ");
+            if (confirmation.equalsIgnoreCase("y")) return true;
+            else if (confirmation.equalsIgnoreCase("n")) return false;
+            else continue;
+        } while (true);
+    }
+
     // Reminder: Call this on the very last line of the "main" program
     public static void close() {
         SCAN.close();
