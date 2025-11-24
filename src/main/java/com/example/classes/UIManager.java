@@ -11,7 +11,11 @@ import de.vandermeer.skb.interfaces.transformers.textformat.TextAlignment;
 
 // UI class for design
 class UIManager {
-
+    private enum AccountType {
+        CUSTOMER,
+        PHARMACY,
+        ADMIN
+    }
     private static AsciiTable asciiTable;
 
     public static void clear() {
