@@ -1,0 +1,21 @@
+{
+  "name" : "1",
+  "username" : "1",
+  "password" : "1",
+  "medicines" : [ {
+    "name" : "Paracetamol",
+    "brand" : "Biogesic",
+    "purpose" : "Pain relief",
+    "expirationDate" : "15/12/2025",
+    "amount" : 16,
+    "price" : 5.5
+  }, {
+    "name" : "a",
+    "brand" : "eqewqe",
+    "purpose" : "qeqweqqe",
+    "expirationDate" : "2/1/1223",
+    "amount" : 1,
+    "price" : 2.0
+  } ],
+  "funds" : 397.0
+}

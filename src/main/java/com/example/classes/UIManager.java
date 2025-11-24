@@ -5,10 +5,8 @@ import java.util.Set;
 
 import de.vandermeer.asciitable.AT_Cell;
 import de.vandermeer.asciitable.AT_Row;
-import de.vandermeer.asciitable.AT_Cell;
-import de.vandermeer.asciitable.AT_Row;
 import de.vandermeer.asciitable.AsciiTable;
-import de.vandermeer.skb.interfaces.transformers.textformat.TextAlignment;
+import de.vandermeer.asciitable.CWC_LongestLine;
 import de.vandermeer.skb.interfaces.transformers.textformat.TextAlignment;
 
 // UI class for design
@@ -25,10 +23,6 @@ class UIManager {
     }
 
     // Login choice method
-    public static void displayLoginChoice() {
-        asciiTable = new AsciiTable();
-    
-
     public static void displayLoginChoice() {
 
         // Login loop
@@ -72,26 +66,14 @@ class UIManager {
                     AccountType.PHARMACY;
                 case 3 ->
                     AccountType.ADMIN;
-                accountType = switch (InputHandler.getValidChoice(Set.of(3, 2, 1, 0))) {
-                case 1 ->
-                    AccountType.CUSTOMER;
-                case 2 ->
-                    AccountType.PHARMACY;
-                case 3 ->
-                    AccountType.ADMIN;
                 case 0 -> {
                     System.out.println("\nExiting...");
                     yield null;
                 }
                 default ->
                     null;
-                default ->
-                    null;
             };
 
-            if (accountType == null) {
-                break;
-            }
             if (accountType == null) {
                 break;
             }
@@ -117,12 +99,6 @@ class UIManager {
 
                 // verify credentials
                 authenticated = switch (accountType) {
-                    case CUSTOMER ->
-                        AuthService.logInCustomer(username, password);
-                    case PHARMACY ->
-                        AuthService.logInPharmacy(username, password);
-                    case ADMIN ->
-                        AuthService.logInAdmin(username, password);
                     case CUSTOMER ->
                         AuthService.logInCustomer(username, password);
                     case PHARMACY ->
@@ -168,8 +144,7 @@ class UIManager {
         String[] rows = {
             "1. Buy Medicine",
             "2. View Account Details",
-            "3. Deposit Funds",
-            "4. View Transactions",};
+            "3. Deposit Funds",};
 
         for (String label : rows) {
             AT_Cell cell = asciiTable.addRow(label).getCells().get(0);
@@ -191,12 +166,74 @@ class UIManager {
 
         switch (choice) {
             case 1 -> {
+                boolean stayingInAddMenu = true;
+                while (stayingInAddMenu) {
+
+                    // 1. Perform the action FIRST
+                    customer.buyMedicine();
+                    // 2. Then ask what to do next
+                    UIManager.clear();
+                    asciiTable = new AsciiTable();
+                    asciiTable.addRule();
+                    asciiTable.addRow("What action would you like to perform next?");
+                    asciiTable.addRule();
+                    asciiTable.setTextAlignment(TextAlignment.CENTER);
+
+                    String[] options = {"1. Buy Again", "2. Back to Menu"};
+
+                    for (String label : options) {
+                        AT_Cell cell = asciiTable.addRow(label).getCells().get(0);
+                        cell.getContext().setPadding(1).setPaddingLeft(7);
+                        cell.getContext().setTextAlignment(TextAlignment.LEFT);
+                    }
+                    asciiTable.addRule();
+
+                    System.out.println(asciiTable.render());
+
+                    int subChoice = InputHandler.getValidChoice(Set.of(2, 1));
+
+                    if (subChoice == 2) {
+                        stayingInAddMenu = false;
+                        UIManager.displayCustomerMenu(customer);
+                    }
+                }
             }
             case 2 -> {
+                customer.viewAccountDetails();
+                UIManager.displayCustomerMenu(customer);
             }
             case 3 -> {
-            }
-            case 4 -> {
+                boolean stayingInAddMenu = true;
+                while (stayingInAddMenu) {
+
+                    // 1. Perform the action FIRST
+                    customer.depositFunds();
+                    // 2. Then ask what to do next
+                    UIManager.clear();
+                    asciiTable = new AsciiTable();
+                    asciiTable.addRule();
+                    asciiTable.addRow("What action would you like to perform next?");
+                    asciiTable.addRule();
+                    asciiTable.setTextAlignment(TextAlignment.CENTER);
+
+                    String[] options = {"1. Deposit Again", "2. Back to Menu"};
+
+                    for (String label : options) {
+                        AT_Cell cell = asciiTable.addRow(label).getCells().get(0);
+                        cell.getContext().setPadding(1).setPaddingLeft(7);
+                        cell.getContext().setTextAlignment(TextAlignment.LEFT);
+                    }
+                    asciiTable.addRule();
+
+                    System.out.println(asciiTable.render());
+
+                    int subChoice = InputHandler.getValidChoice(Set.of(2, 1));
+
+                    if (subChoice == 2) {
+                        stayingInAddMenu = false;
+                        UIManager.displayCustomerMenu(customer);
+                    }
+                }
             }
             case 0 ->
                 System.out.println("\nExiting...");
@@ -285,15 +322,21 @@ class UIManager {
                 }
                 case 2 -> {
                     UIManager.clear();
-                    displayData(pharmacy.getMedicines());
-                    pharmacy.searchMedicine();
+                    displayData(pharmacy.getMedicines(), true);
+                    //pharmacy.searchMedicine();
                 }
-                case 3 ->
-                    pharmacy.updateMedicineAmount();
-                case 4 ->
-                    pharmacy.updateMedicinePrice();
-                case 5 ->
-                    pharmacy.deleteMedicine();
+                case 3 -> {
+
+                }
+                //pharmacy.updateMedicineAmount();
+                case 4 -> {
+
+                }
+                //pharmacy.updateMedicinePrice();
+                case 5 -> {
+
+                }
+                //pharmacy.deleteMedicine();
             }
 
         }
@@ -353,10 +396,6 @@ class UIManager {
                     // --- SUB MENU LOOP ---
                     boolean stayingInAddMenu = true;
                     while (stayingInAddMenu) {
-
-                        // 1. Perform the action FIRST
-                        //pharmacy.addMedicine();
-                        // 2. Then ask what to do next
                         UIManager.clear();
                         asciiTable = new AsciiTable();
                         asciiTable.addRule();
@@ -401,34 +440,95 @@ class UIManager {
     public static void displayData(Account account) {
     }
 
-    ;
     public static void displayData(List<Medicine> medicines, boolean indexed) {
         asciiTable = new AsciiTable();
 
+        // 2. [WIDTH] Use LongestLine renderer
+        asciiTable.getRenderer().setCWC(new CWC_LongestLine());
+
         // Header
         asciiTable.addRule();
+        AT_Row headerRow; // Variable to capture the row
+
         if (!indexed) {
-            asciiTable.addRow("Name", "Price", "Amount", "Brand", "Expires At", "Purpose");
+            // [TRICK] The spaces ensure the columns are wide enough
+            headerRow = asciiTable.addRow(
+                    "          Name          ",
+                    "   Price   ",
+                    "  Amount  ",
+                    "     Brand     ",
+                    "   Expires At   ",
+                    "                    Purpose                    "
+            );
         } else {
-            asciiTable.addRow("Position #", "Name", "Price", "Amount", "Brand", "Expires At", "Purpose");
+            headerRow = asciiTable.addRow(
+                    " Pos # ",
+                    "          Name          ",
+                    "   Price   ",
+                    "  Amount  ",
+                    "     Brand     ",
+                    "   Expires At   ",
+                    "                    Purpose                    "
+            );
         }
+
+        // [CRITICAL FIX] Center ONLY the header row
+        headerRow.setTextAlignment(TextAlignment.CENTER);
+
         asciiTable.addRule();
 
-        // Insert data
-        for (Medicine medicine : medicines) {
-            asciiTable.addRow(
-                    medicine.getName(), medicine.getPrice(), medicine.getAmount(),
-                    medicine.getBrand(), medicine.getExpirationDate(), medicine.getPurpose()
-            );
-            asciiTable.addRule();
+        // Insert Data (Will use the Global LEFT alignment)
+        if (!indexed) {
+            for (Medicine medicine : medicines) {
+                asciiTable.addRow(
+                        medicine.getName(),
+                        medicine.getPrice(),
+                        medicine.getAmount(),
+                        medicine.getBrand(),
+                        medicine.getExpirationDate(),
+                        medicine.getPurpose()
+                );
+                asciiTable.addRule();
+            }
+        } else {
+            int indexCounter = 0;
+            for (Medicine medicine : medicines) {
+                asciiTable.addRow(
+                        indexCounter,
+                        medicine.getName(),
+                        medicine.getPrice(),
+                        medicine.getAmount(),
+                        medicine.getBrand(),
+                        medicine.getExpirationDate(),
+                        medicine.getPurpose()
+                );
+                asciiTable.addRule();
+                indexCounter++;
+            }
         }
 
-        // Render and print table to console
+        asciiTable.setPadding(2);
+
+        // Render and print
         String rend = asciiTable.render();
         System.out.println(rend);
     }
 
-    public static void displayData(List<Medicine> medicines) {
-        displayData(medicines, false);
+    public static void buyMedicineUI() {
+        asciiTable = new AsciiTable();
+
+        asciiTable.addRule();
+        asciiTable.addRow("+ Buy Medicine +");
+        asciiTable.setTextAlignment(TextAlignment.CENTER);
+        asciiTable.addRule();
+        AT_Cell cell = asciiTable.addRow("> Which medicine would you like to buy?").getCells().get(0);
+        cell.getContext().setPadding(1);
+        cell.getContext().setTextAlignment(TextAlignment.CENTER);
+        asciiTable.addRule();
+
+        asciiTable.getContext().setWidth(166);
+
+        String rend = asciiTable.render();
+        System.out.println(rend);
     }
 }
