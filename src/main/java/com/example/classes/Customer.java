@@ -43,37 +43,29 @@ public class Customer extends Account {
 
     // -----------------------------------------------------------
     public void buyMedicine() {
-        at = new AsciiTable();
-        at.addRule();
-        at.addRow("+ Buy Medicine +");
-        at.setTextAlignment(TextAlignment.CENTER);
-        at.addRule();
-        AT_Cell cell = at.addRow("> Which medicine would you like to buy?").getCells().get(0);
-        cell.getContext().setPadding(1).setPaddingLeft(7);
-        cell.getContext().setTextAlignment(TextAlignment.LEFT);
-        at.addRule();
-        String rend = at.render();
-        System.out.println(rend);
-
-        // 1. Load the specific Pharmacy instance
-        Pharmacy targetPharmacy = Database.loadJmPharmacy("JmPharmacy.json");
-
-        if (targetPharmacy == null) {
-            System.out.println("[ERROR]: Failed to load Jm Pharmacy data.");
-            return;
-        }
-
-        List<Medicine> currentDisplayList = targetPharmacy.getMedicines();
-
         do {
-            System.out.println("\n--- Current Balance: $" + this.funds + " ---");
-            UIManager.displayData(currentDisplayList, true);
+            UIManager.clear();
 
-            System.out.println("Instructions: ");
-            System.out.println("- Select medicine by entering its **position number**.");
+            UIManager.buyMedicineUI();
+
+            // 1. Load the specific Pharmacy instance
+            Pharmacy targetPharmacy = Database.loadJmPharmacy("JmPharmacy.json");
+
+            if (targetPharmacy == null) {
+                System.err.println("[ERROR]: Failed to load Jm Pharmacy data.");
+                return;
+            }
+
+            List<Medicine> currentDisplayList = targetPharmacy.getMedicines();
+
+            UIManager.displayData(currentDisplayList, true);
+            System.out.println("\n--- Current Balance: Php " + getFunds() + " ---");
+
+            System.out.println("\nInstructions: ");
+            System.out.println("- Select medicine by entering its ** position number **.");
             System.out.println("- Search medicine by name or enter 'q' to exit.");
 
-            String input = InputHandler.readNonEmptyLine("Enter input: ");
+            String input = InputHandler.readNonEmptyLine("\nEnter input >> ");
 
             if (input.equalsIgnoreCase("q")) {
                 break;
@@ -86,25 +78,26 @@ public class Customer extends Account {
                     Medicine selectedMedicine = currentDisplayList.get(pos);
 
                     if (selectedMedicine.getAmount() <= 0) {
-                        System.out.println("[ERROR]: Item is out of stock.");
+                        System.out.println("\n[ERROR]: Item is out of stock.");
                         continue;
                     }
 
-                    int quantity = InputHandler.readInt("How many units to buy? ", true);
+                    System.out.println("\nHow many units would you like?");
+                    int quantity = InputHandler.readInt("\nUnits >> ");
 
                     if (quantity > selectedMedicine.getAmount()) {
-                        System.out.println("[ERROR]: Only " + selectedMedicine.getAmount() + " units available.");
+                        System.out.println("\n[ERROR]: Only " + selectedMedicine.getAmount() + " units available.");
                         continue;
                     }
 
                     double totalCost = quantity * selectedMedicine.getPrice();
 
                     if (this.funds < totalCost) {
-                        System.out.println("[ERROR]: Insufficient funds.");
+                        System.out.println("\n[ERROR]: Insufficient funds.");
                         continue;
                     }
 
-                    System.out.println("Confirm purchase for $" + totalCost + "? (y/n)");
+                    System.out.println("\nConfirm purchase for Php " + totalCost + "? (y/n)");
                     String confirmation = InputHandler.readNonEmptyLine("(y/n): ");
 
                     if (confirmation.equalsIgnoreCase("y")) {
@@ -143,24 +136,26 @@ public class Customer extends Account {
                         Database.save(this);
 
                         System.out.println("\n[SUCCESS]: Purchased.");
-                        currentDisplayList = targetPharmacy.getMedicines(); // Refresh list
+                        break;
                     }
                 } else {
-                    System.out.println("[ERROR]: Invalid position.");
+                    System.out.println("\n[ERROR]: Invalid position.");
                 }
             } catch (NumberFormatException e) {
                 List<Medicine> searchResult = targetPharmacy.searchMedicine(input);
                 if (searchResult == null) {
-                    System.out.println("No results found.");
+                    System.out.println("\nNo results found.");
                     currentDisplayList = targetPharmacy.getMedicines();
                 } else {
                     currentDisplayList = searchResult;
                 }
             }
         } while (true);
+
     }
 
     public void viewAccountDetails() {
+        UIManager.clear();
         // ==========================================
         // PART 1: The Title (1 Column Table)
         // ==========================================
@@ -168,7 +163,6 @@ public class Customer extends Account {
         titleTable.addRule();
         titleTable.addRow("+ Account Details +");
         titleTable.setTextAlignment(TextAlignment.CENTER);
-        titleTable.addRule();
         System.out.println(titleTable.render());
 
         // ==========================================
@@ -201,6 +195,8 @@ public class Customer extends Account {
         headerTable.setTextAlignment(TextAlignment.CENTER);
         headerTable.addRule();
 
+        headerTable.getContext().setWidth(166);
+
         System.out.println(headerTable.render());
 
         // ==========================================
@@ -211,20 +207,19 @@ public class Customer extends Account {
         if (myMedicines == null || myMedicines.isEmpty()) {
             System.out.println("No items purchased yet.");
         } else {
-            UIManager.displayData(myMedicines);
+            UIManager.displayData(myMedicines, true);
         }
 
         // Pause
-        System.out.println("\n(Press Enter to return to menu)");
+        System.out.print("\n(Press Enter to return to menu)");
         try {
-            System.in.read(); // Correctly waits for Enter key
+            System.in.read();
         } catch (Exception e) {
-            // Ignore errors
         }
     }
 
     public void depositFunds() {
-
+        UIManager.clear();
         at = new AsciiTable();
 
         at.addRule();
@@ -239,7 +234,7 @@ public class Customer extends Account {
 
         System.out.println(rend);
 
-        double value = InputHandler.getDoubleChoice();
+        double value = InputHandler.readDouble("");
 
         this.funds += value;
 
