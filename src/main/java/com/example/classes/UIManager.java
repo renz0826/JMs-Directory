@@ -247,60 +247,51 @@ class UIManager {
             switch (mainChoice) {
                 case 1 -> {
                     // --- SUB MENU LOOP ---
-                    boolean stayingInAddMenu = true;
-                    while (stayingInAddMenu) {
-
-                        // 1. Perform the action FIRST
-                        pharmacy.addMedicine();
-                        // 2. Then ask what to do next
+                    do {
+                        pharmacy.addMedicine(); // 1. Perform the action FIRST
+                        
                         UIManager.clear();
                         asciiTable = new AsciiTable();
                         asciiTable.addRule();
-                        asciiTable.addRow("What action would you like to perform next?");
+                        asciiTable.addRow("Would you like to add another medicine? (y/n)");
                         asciiTable.addRule();
                         asciiTable.setTextAlignment(TextAlignment.CENTER);
-
-                        String[] options = {"1. Add another medicine", "2. Back to menu"};
-
-                        for (String label : options) {
-                            AT_Cell cell = asciiTable.addRow(label).getCells().get(0);
-                            cell.getContext().setPadding(1).setPaddingLeft(7);
-                            cell.getContext().setTextAlignment(TextAlignment.LEFT);
-                        }
-                        asciiTable.addRule();
-
                         System.out.println(asciiTable.render());
 
-                        int subChoice = InputHandler.getValidChoice(Set.of(2, 1));
-
-                        if (subChoice == 2) {
-                            stayingInAddMenu = false;
-                        }
-                    }
+                        if (InputHandler.promptYesOrNo()) continue; // 2. Then ask what to do next
+                        else break;
+                    } while (true);
                 }
                 case 2 -> {
                     // display all medicines once
                     List<Medicine> medicines = pharmacy.getMedicines();
-                    displayMedicineTable(medicines);
-
+                    
                     do {
+                        displayMedicineTable(medicines);
+                        ErrorMessage.displayNext();
+
                         System.out.println("Search medicine by name or enter 'q' to exit.");
                         String targetName = InputHandler.readInput("Enter: ");
-                        if (targetName.equalsIgnoreCase("q")) break;
-                        medicines = pharmacy.searchMedicine(targetName);
+                        if (targetName.equalsIgnoreCase("q")) { break; }
+                        List<Medicine> found = pharmacy.searchMedicine(targetName);
 
-                        if (medicines == null) {
-                            System.out.println("No results found");
+                        if (found == null) {
+                            // Reset to original list if target medicines are not found
+                            ErrorMessage.queueMessage("\n[SUCCESS]: No results found.");
+                            medicines = pharmacy.getMedicines();
                         } else {
-                            displayMedicineTable(medicines);
+                            ErrorMessage.queueMessage("\n[SUCCESS]: Returned " + found.size() + " results.");
+                            medicines = found;
                         }
                     } while (true);
                     // UIManager.clear();
                 }
+                // FOR UPDATE AND DELETE
                 case 3, 4, 5 -> {
                     do {
                         List<Medicine> medicines = pharmacy.getMedicines();
                         displayMedicineTable(medicines);
+                        ErrorMessage.displayAll();
 
                         System.out.println("Instructions: ");
                         System.out.println("- Select medicine by entering its position number.");
@@ -316,7 +307,7 @@ class UIManager {
                         // do not allow double for position
                         String doublePattern = "-?(\\d*\\.\\d+|\\d+\\.\\d*)";
                         if (input.matches(doublePattern)) {
-                            System.out.println("[ERROR]: Enter a valid position");
+                            ErrorMessage.queueMessage("\n[ERROR]: Enter a valid position");
                             continue;
                         }
 
@@ -329,13 +320,13 @@ class UIManager {
                         } catch (NumberFormatException e) {
                             List<Medicine> result = pharmacy.searchMedicine(input);
                             if (result == null) {
-                                System.out.println("No results found");
+                                ErrorMessage.queueMessage("\n[SUCCESS]: No results found");
                             } else {
                                 medicines = result;
                             }
                             continue;
                         } catch (IndexOutOfBoundsException e) {
-                            System.out.println("[ERROR]: Medicine not found at position " + pos);
+                            ErrorMessage.queueMessage("\n[ERROR]: Invalid Position.");
                             continue;
                         }
 
@@ -346,10 +337,20 @@ class UIManager {
                             double amount = InputHandler.readDouble("Enter new price: ");
                             pharmacy.updateMedicinePrice(targetName, amount);
                         } else {
-                            System.out.println("Are you sure you want to delete " + targetName + "?");
-                            String confirmation = InputHandler.readInput("(y/n): ");
-                            if (confirmation.equalsIgnoreCase("y")) { pharmacy.deleteMedicine(targetName); }
-                            medicines = pharmacy.getMedicines(); // update list
+                            // 1. Render heading
+                            UIManager.clear();
+                            asciiTable = new AsciiTable();
+                            asciiTable.addRule();
+                            asciiTable.addRow("Are you sure you want to delete " + targetName + "? (y/n)");
+                            asciiTable.addRule();
+                            asciiTable.setTextAlignment(TextAlignment.CENTER);
+                            System.out.println(asciiTable.render());
+
+                            // 2. Prompt user choice
+                            if (InputHandler.promptYesOrNo()) { pharmacy.deleteMedicine(targetName); }
+                            
+                            // 3. Update list
+                            medicines = pharmacy.getMedicines();
                         }
                     } while (true);
                 }
