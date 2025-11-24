@@ -461,9 +461,8 @@ class UIManager {
                         if (choice == 3) { 
                             admin.updateCustomerDetails(targetName); 
                         } else {
-                            System.out.println("Are you sure you want to delete " + targetName + "?");
-                            String confirmation = InputHandler.readInput("(y/n): ");
-                            if (confirmation.equalsIgnoreCase("y")) { admin.deleteCustomer(targetName); }
+                            System.out.println("Are you sure you want to delete " + targetName + "? (y/n)");
+                            if (InputHandler.promptYesOrNo()) { admin.deleteCustomer(targetName); }
                             customers = admin.getCustomers(); // update list
                         }
                     } while (true);
