@@ -64,11 +64,6 @@ public class Customer extends Account {
         List<Medicine> currentDisplayList = targetPharmacy.getMedicines();
 
         do {
-            System.out.println("\n--- Current Balance: $" + this.funds + " ---");
-            UIManager.displayMedicineTable(currentDisplayList);
-
-            UIManager.buyMedicineUI();
-
             UIManager.displayMedicineTable(currentDisplayList);
             System.out.println("\n--- Current Balance: Php " + getFunds() + " ---");
 
