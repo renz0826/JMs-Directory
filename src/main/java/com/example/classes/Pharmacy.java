@@ -25,13 +25,13 @@ public class Pharmacy extends Account {
     // CRUD Methods
     public void addMedicine() {
         // Prompt line and Input validation
-        System.out.println("Enter medicine details.");
-        String name = InputHandler.readInput("Name: ");
-        double price = InputHandler.readDouble("Price (PHP): ");
-        int amount = InputHandler.readInt("Initial amount: ");
-        String expirationDate = InputHandler.readMedicineDate("Expiration Date (d/m/yyyy): ");
-        String brand = InputHandler.readInput("Brand: ");
-        String purpose = InputHandler.readInput("Purpose: ");
+        System.out.println("Instructions: Enter medicine details.");
+        String name = InputHandler.readInput("Name >> ");
+        double price = InputHandler.readDouble("Price (PHP) >> ");
+        int amount = InputHandler.readInt("Initial amount >> ");
+        String expirationDate = InputHandler.readMedicineDate("Expiration Date (d/m/yyyy) >> ");
+        String brand = InputHandler.readInput("Brand >> ");
+        String purpose = InputHandler.readInput("Purpose >> ");
 
         // Save sanitized inputs to database
         Medicine newMedicine = new Medicine(name, brand, purpose, expirationDate, amount, price);

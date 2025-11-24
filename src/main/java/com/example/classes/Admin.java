@@ -27,9 +27,9 @@ public class Admin extends Account {
     // Method to create a new customer account
     public void addCustomerAccount() {
         System.out.println("Enter Customer details.");
-        String name = InputHandler.readInput("Name: ");
-        String username = InputHandler.readInput("Username: ");
-        String password = InputHandler.readInput("Password: ");
+        String name = InputHandler.readInput("Name >> ");
+        String username = InputHandler.readInput("Username >> ");
+        String password = InputHandler.readInput("Password >> ");
         List<Medicine> medicines = List.of();
 
         Customer newCustomer = new Customer(name, username, password, medicines, 0);
@@ -56,9 +56,9 @@ public class Admin extends Account {
         Customer customer = getCustomer(targetName);
 
         System.out.println("Enter New Customer details.");
-        String name = InputHandler.readInput("Name: ");
-        String username = InputHandler.readInput("Username: ");
-        String password = InputHandler.readInput("Password: ");
+        String name = InputHandler.readInput("Name >> ");
+        String username = InputHandler.readInput("Username >> ");
+        String password = InputHandler.readInput("Password >> ");
 
         customer.setName(name);
         customer.setUsername(username);
@@ -69,9 +69,9 @@ public class Admin extends Account {
 
     public void updatePharamacyDetails() {
         System.out.println("Enter New Pharmacy details.");
-        String name = InputHandler.readInput("Name: ");
-        String username = InputHandler.readInput("Username: ");
-        String password = InputHandler.readInput("Password: ");
+        String name = InputHandler.readInput("Name >> ");
+        String username = InputHandler.readInput("Username >> ");
+        String password = InputHandler.readInput("Password >> ");
 
         pharmacy.setName(name);
         pharmacy.setUsername(username);
