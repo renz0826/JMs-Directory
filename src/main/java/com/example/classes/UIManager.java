@@ -136,6 +136,7 @@ class UIManager {
     }
 
     public static void displayCustomerMenu(Customer customer) {
+        boolean continueMenuLoop = true;
         do {
             UIManager.clear();
             asciiTable = new AsciiTable();
@@ -174,7 +175,7 @@ class UIManager {
                 case 2 -> customer.viewAccountDetails();
                 case 3 -> {
                     boolean stayingInAddMenu = true;
-                    while (stayingInAddMenu) {
+                    do {
 
                         // 1. Perform the action FIRST
                         customer.depositFunds();
@@ -187,15 +188,15 @@ class UIManager {
                         asciiTable.setTextAlignment(TextAlignment.CENTER);
                         System.out.println(asciiTable.render());
                         if (InputHandler.promptYesOrNo()) { continue; }
-                        else { break; }
-                    }
+                        else { stayingInAddMenu = false; }
+                    } while (stayingInAddMenu);
                 }
                 case 0 -> {
                     System.out.println("\nExiting...");
-                    break;
+                    continueMenuLoop = false;
                 }
             }
-        } while (true);
+        } while (continueMenuLoop);
     }
 
     public static void displayPharmacyMenu(Pharmacy pharmacy) {
@@ -385,9 +386,10 @@ class UIManager {
         row.setPadding(1).setPaddingLeft(7);
         asciiTable.addRule();
 
-       // Render table
+        // Render table
         String rend = asciiTable.render();
         
+        boolean continueMenuLoop = true;
         do {
             // Print table and any error message
             System.out.println(rend);
@@ -475,10 +477,10 @@ class UIManager {
                 case 4 -> admin.updatePharamacyDetails();
                 case 0 -> {
                     System.out.println("\nExiting...");
-                    break;
+                    continueMenuLoop = false;
                 }
             }
-        } while (true);
+        } while (continueMenuLoop);
     }
 
     private static void displayCustomerTable(List<Customer> accounts) {
