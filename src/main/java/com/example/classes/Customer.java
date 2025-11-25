@@ -6,7 +6,6 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import de.vandermeer.asciitable.AT_Cell;
 import de.vandermeer.asciitable.AsciiTable;
 import de.vandermeer.skb.interfaces.transformers.textformat.TextAlignment;
 
@@ -49,19 +48,13 @@ public class Customer extends Account {
         if (targetPharmacy == null) return;
 
         // 2. Continue program if Pharmacy is ok
-        at = new AsciiTable();
-        at.addRule();
-        at.addRow("+ Buy Medicine +");
-        at.setTextAlignment(TextAlignment.CENTER);
-        at.addRule();
-        AT_Cell cell = at.addRow("> Which medicine would you like to buy?").getCells().get(0);
-        cell.getContext().setPadding(1).setPaddingLeft(7);
-        cell.getContext().setTextAlignment(TextAlignment.LEFT);
-        at.addRule();
-        String rend = at.render();
+        String popUp = new AsciiTableBuilder()
+                .setHeader("+ Buy Medicine +")
+                .setRow("> Which medicine would you like to buy?")
+                .buildGenericPopUpMenu();
         
         // 3. Render the prompt table and start point of the operation
-        System.out.println(rend);
+        System.out.println(popUp);
 
         List<Medicine> currentDisplayList = targetPharmacy.getMedicines();
 
@@ -153,12 +146,8 @@ public class Customer extends Account {
 
             // Display after buying 
             UIManager.clear();
-            at = new AsciiTable();
-            at.addRule();
-            at.addRow("Would you like to buy another medicine? (y/n)");
-            at.addRule();
-            at.setTextAlignment(TextAlignment.CENTER);
-            System.out.println(at.render());
+            String message = "Would you like to buy another medicine? (y/n)";
+            System.out.println(AsciiTableBuilder.buildSingleRow(message));
 
             if (InputHandler.promptYesOrNo()) { continue; }
             else { break; }
@@ -228,23 +217,13 @@ public class Customer extends Account {
 
     public void depositFunds() {
         UIManager.clear();
-        at = new AsciiTable();
+        String popUp = new AsciiTableBuilder()
+                .setHeader("+ Deposit Funds +")
+                .setRow("> How much would you like to deposit?")
+                .buildGenericPopUpMenu();
+        System.out.println(popUp);
 
-        at.addRule();
-        at.addRow("+ Deposit Funds +");
-        at.setTextAlignment(TextAlignment.CENTER);
-        at.addRule();
-        AT_Cell cell = at.addRow("> How much would you like to deposit?").getCells().get(0);
-        cell.getContext().setPadding(1).setPaddingLeft(7);
-        cell.getContext().setTextAlignment(TextAlignment.LEFT);
-        at.addRule();
-        String rend = at.render();
-
-        System.out.println(rend);
-
-        double value = InputHandler.readDouble("Enter amount >> ");
-
-        this.funds += value;
+        this.funds += InputHandler.readDouble("Enter amount >> ");
 
         System.out.println("Funds: " + getFunds());
 

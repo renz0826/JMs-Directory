@@ -28,36 +28,17 @@ class UIManager {
 
     // Login choice method
     public static void displayLoginChoice() {
+        String table = new AsciiTableBuilder()
+                .setHeader("+ Select Account Type +")
+                .setRows("1. Customer", "2. Pharmacy", "3. Admin")
+                .setFooter("0. Exit")
+                .buildGenericMenuTable();
 
         // Login loop
         while (true) {
             UIManager.clear();
-            // Header
-            asciiTable = new AsciiTable();
-            asciiTable.addRule();
-            asciiTable.addRow("+ Select Account Type +");
-            asciiTable.addRule();
-            asciiTable.setTextAlignment(TextAlignment.CENTER);
-
-            String[] rows = {
-                "1. Customer",
-                "2. Pharmacy",
-                "3. Admin",};
-
-            for (String label : rows) {
-                AT_Cell cell = asciiTable.addRow(label).getCells().get(0);
-                cell.getContext().setPadding(1).setPaddingLeft(7);
-                cell.getContext().setTextAlignment(TextAlignment.LEFT);
-            }
-
-            asciiTable.addRule();
-            AT_Row row = asciiTable.addRow("0. Exit");
-            row.setPadding(1).setPaddingLeft(7);
-            asciiTable.addRule();
-
-            // Render and print
-            String rend = asciiTable.render();
-            System.out.println(rend);
+            // Render Table
+            System.out.println(table);
 
             Account authenticated = null;
             AccountType accountType;
@@ -86,16 +67,7 @@ class UIManager {
             while (authenticated == null) {
 
                 UIManager.clear();
-
-                asciiTable = new AsciiTable();
-
-                asciiTable.addRule();
-                asciiTable.addRow("+ Login +");
-                asciiTable.addRule();
-                asciiTable.setTextAlignment(TextAlignment.CENTER);
-                String rend2 = asciiTable.render();
-                System.out.println(rend2);
-
+                System.out.println(AsciiTableBuilder.buildSingleRow("+ Login +"));
                 String promptUsername = "\nEnter Username\nUsername >> ";
                 String promptPassword = "\nEnter Password\nPassword >> ";
                 String username = InputHandler.readInput(promptUsername);
@@ -136,38 +108,22 @@ class UIManager {
     }
 
     public static void displayCustomerMenu(Customer customer) {
+        String table = new AsciiTableBuilder()
+                .setHeader("+ Customer Menu +")
+                .setRows("1. Buy Medicine", "2. View Account Details", "3. Deposit Funds")
+                .setFooter("0. Logout")
+                .buildGenericMenuTable();
         boolean continueMenuLoop = true;
+
         do {
+            // Clear screen when entering
             UIManager.clear();
-            asciiTable = new AsciiTable();
-            // Header
-            asciiTable.addRule();
-            asciiTable.addRow("+ Customer Menu +");
-            asciiTable.addRule();
-            asciiTable.setTextAlignment(TextAlignment.CENTER);
-
-            String[] rows = {
-                "1. Buy Medicine",
-                "2. View Account Details",
-                "3. Deposit Funds",};
-
-            for (String label : rows) {
-                AT_Cell cell = asciiTable.addRow(label).getCells().get(0);
-                cell.getContext().setPadding(1).setPaddingLeft(7);
-                cell.getContext().setTextAlignment(TextAlignment.LEFT);
-            }
-
-            asciiTable.addRule();
-            AT_Row row = asciiTable.addRow("0. Logout");
-            row.setPadding(1).setPaddingLeft(7);
-            asciiTable.addRule();
-
-            // Render and print
-            String rend = asciiTable.render();
-            System.out.println(rend);
+            // Render table
+            System.out.println(table);
+            // Display any error messages
             ErrorMessage.displayNext();
 
-            // Valid choices
+            // Get valid choices from user
             int choice = InputHandler.getValidChoice(Set.of(4, 3, 2, 1, 0));
 
             switch (choice) {
@@ -176,17 +132,10 @@ class UIManager {
                 case 3 -> {
                     boolean stayingInAddMenu = true;
                     do {
-
                         // 1. Perform the action FIRST
                         customer.depositFunds();
                         // 2. Then ask what to do next
-                        UIManager.clear();
-                        asciiTable = new AsciiTable();
-                        asciiTable.addRule();
-                        asciiTable.addRow("Would you like to deposit again? (y/n)");
-                        asciiTable.addRule();
-                        asciiTable.setTextAlignment(TextAlignment.CENTER);
-                        System.out.println(asciiTable.render());
+                        System.out.println(AsciiTableBuilder.buildSingleRow("Would you like to deposit again? (y/n)"));
                         if (InputHandler.promptYesOrNo()) { continue; }
                         else { stayingInAddMenu = false; }
                     } while (stayingInAddMenu);
@@ -200,64 +149,44 @@ class UIManager {
     }
 
     public static void displayPharmacyMenu(Pharmacy pharmacy) {
-        while (true) {
-
-            // Clear screen at start of every loop
-            UIManager.clear();
-
-            // Reset table (Critical to prevent "ghost" rows)
-            asciiTable = new AsciiTable();
-
-            // --- Header Construction ---
-            asciiTable.addRule();
-            asciiTable.addRow("+ Pharmacy Menu +");
-            asciiTable.addRule();
-            asciiTable.setTextAlignment(TextAlignment.CENTER);
-
-            String[] rows = {
+        String[] rows = {
                 "1. Add Medicine",
                 "2. Show List of Medicines",
                 "3. Update Medicine Amount",
                 "4. Update Medicine Price",
-                "5. Delete Medicine",};
+                "5. Delete Medicine"
+        };
+        String table = new AsciiTableBuilder()
+                .setHeader("+ Pharmacy Menu +")
+                .setRows(rows)
+                .setFooter("0. Logout")
+                .buildGenericMenuTable();
+        boolean continueMenuLoop = true;
 
-            for (String label : rows) {
-                AT_Cell cell = asciiTable.addRow(label).getCells().get(0);
-                cell.getContext().setPadding(1).setPaddingLeft(7);
-                cell.getContext().setTextAlignment(TextAlignment.LEFT);
-            }
-
-            asciiTable.addRule();
-            AT_Row row = asciiTable.addRow("0. Logout");
-            row.setPadding(1).setPaddingLeft(7);
-            asciiTable.addRule();
-
-            String rend = asciiTable.render();
-            System.out.println(rend);
+        do {
+            // Clear screen at start of every loop
+            UIManager.clear();
+            // Render table menu
+            System.out.println(table);
+            // Display any errors
+            ErrorMessage.displayAll();
 
             // Initialize choice
             int mainChoice = InputHandler.getValidChoice(Set.of(5, 4, 3, 2, 1, 0));
 
-            if (mainChoice == 0) {
-                System.out.println("\nLogging out...");
-                UIManager.clear();
-                break;
-            }
-
             // Handle Main Menu Actions
             switch (mainChoice) {
+                case 0 -> {
+                    System.out.println("\nLogging out...");
+                    continueMenuLoop = false;
+                }
                 case 1 -> {
                     // --- SUB MENU LOOP ---
                     do {
                         pharmacy.addMedicine(); // 1. Perform the action FIRST
-                        
                         UIManager.clear();
-                        asciiTable = new AsciiTable();
-                        asciiTable.addRule();
-                        asciiTable.addRow("Would you like to add another medicine? (y/n)");
-                        asciiTable.addRule();
-                        asciiTable.setTextAlignment(TextAlignment.CENTER);
-                        System.out.println(asciiTable.render());
+                        String message = "Would you like to add another medicine? (y/n)";
+                        System.out.println(AsciiTableBuilder.buildSingleRow(message));
 
                         if (InputHandler.promptYesOrNo()) continue; // 2. Then ask what to do next
                         else break;
@@ -285,7 +214,7 @@ class UIManager {
                             medicines = found;
                         }
                     } while (true);
-                    // UIManager.clear();
+                    UIManager.clear();
                 }
                 // FOR UPDATE AND DELETE
                 case 3, 4, 5 -> {
@@ -338,14 +267,8 @@ class UIManager {
                             double amount = InputHandler.readDouble("Enter new price >> ");
                             pharmacy.updateMedicinePrice(targetName, amount);
                         } else {
-                            // 1. Render heading
-                            UIManager.clear();
-                            asciiTable = new AsciiTable();
-                            asciiTable.addRule();
-                            asciiTable.addRow("Are you sure you want to delete " + targetName + "? (y/n)");
-                            asciiTable.addRule();
-                            asciiTable.setTextAlignment(TextAlignment.CENTER);
-                            System.out.println(asciiTable.render());
+                            String message = "Are you sure you want to delete " + targetName + "? (y/n)";
+                            System.out.println(AsciiTableBuilder.buildSingleRow(message));
 
                             // 2. Prompt user choice
                             if (InputHandler.promptYesOrNo()) { pharmacy.deleteMedicine(targetName); }
@@ -356,44 +279,29 @@ class UIManager {
                     } while (true);
                 }
             }
-        }
+        } while (continueMenuLoop);
     }
 
     public static void displayAdminMenu(Admin admin) {
-        UIManager.clear();
-        asciiTable = new AsciiTable();
-        // Header
-        asciiTable.addRule();
-        asciiTable.addRow("+ Admin Menu +");
-        asciiTable.addRule();
-        asciiTable.setTextAlignment(TextAlignment.CENTER);
-
         String[] rows = {
             "1. Register A Customer",
             "2. Show List Of Customers",
             "3. Edit Customer Credentials",
             "4. Edit Pharmacy Credentials",
-            "5. Delete Customer"};
-
-        for (String label : rows) {
-            AT_Cell cell = asciiTable.addRow(label).getCells().get(0);
-            cell.getContext().setPadding(1).setPaddingLeft(7);
-            cell.getContext().setTextAlignment(TextAlignment.LEFT);
-        }
-
-        asciiTable.addRule();
-        AT_Row row = asciiTable.addRow("0. Logout");
-        row.setPadding(1).setPaddingLeft(7);
-        asciiTable.addRule();
-
-        // Render table
-        String rend = asciiTable.render();
-        
+            "5. Delete Customer"
+        };
+        String table = new AsciiTableBuilder()
+                    .setHeader("+ Admin Menu +")
+                    .setRows(rows)
+                    .setFooter("0. Exit")
+                    .buildGenericMenuTable();
         boolean continueMenuLoop = true;
+
         do {
+            UIManager.clear();
             // Print table and any error message
-            System.out.println(rend);
-            ErrorMessage.displayNext();
+            System.out.println(table);
+            ErrorMessage.displayAll();
 
             // Valid choices
             int choice = InputHandler.getValidChoice(Set.of(8, 7, 6, 5, 4, 3, 2, 1, 0));
@@ -468,7 +376,8 @@ class UIManager {
                         if (choice == 3) { 
                             admin.updateCustomerDetails(targetName); 
                         } else {
-                            System.out.println("Are you sure you want to delete " + targetName + "? (y/n)");
+                            String message = "Are you sure you want to delete " + targetName + "? (y/n)";
+                            System.out.println(AsciiTableBuilder.buildSingleRow(message));
                             if (InputHandler.promptYesOrNo()) { admin.deleteCustomer(targetName); }
                             customers = admin.getCustomers(); // update list
                         }
