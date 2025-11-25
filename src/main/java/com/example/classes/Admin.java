@@ -67,7 +67,7 @@ public class Admin extends Account {
         Database.save(customer);
     }
 
-    public void updatePharamacyDetails() {
+    public void updatePharmacyDetails() {
         System.out.println("Enter New Pharmacy details.");
         String name = InputHandler.readInput("Name >> ");
         String username = InputHandler.readInput("Username >> ");

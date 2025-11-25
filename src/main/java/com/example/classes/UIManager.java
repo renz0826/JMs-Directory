@@ -383,7 +383,7 @@ class UIManager {
                         }
                     } while (true);
                 }
-                case 4 -> admin.updatePharamacyDetails();
+                case 4 -> admin.updatePharmacyDetails();
                 case 0 -> {
                     System.out.println("\nExiting...");
                     continueMenuLoop = false;
