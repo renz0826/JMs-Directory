@@ -3,6 +3,7 @@ package com.example.classes;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 import java.util.Set;
 
@@ -11,7 +12,14 @@ public class InputHandler {
 
     private static final Scanner SCAN = new Scanner(System.in);
 
-    // Method for retrieving and validating inputs
+    /**
+     * Returns an integer based on the valid choices the user entered
+     * 
+     * Prompts the user to enter a valid choice. Empty inputs are not allowed.
+     *  
+     * @param validChoices the set of available choices
+     * @return the valid choice as integer
+     */
     public static int getValidChoice(Set<Integer> validChoices) {
         int choice;
 
@@ -38,14 +46,15 @@ public class InputHandler {
     }
 
     /**
-     * Reads a non-empty line of input from the user.
+     * Reads a line of input from the user.
      *
      * Prompts the user with the given message and repeatedly reads input until
-     * a non-empty string is provided. Input is trimmed of leading and trailing
+     * a string is provided. Input is trimmed of leading and trailing
      * whitespace before being returned.
      *
      * @param prompt the message displayed to the user before reading input
-     * @return a trimmed, non-empty string entered by the user
+     * @param allowEmpty boolean value whether to allow empty input or not, it is false by default (not specified)
+     * @return a trimmed string entered by the user
      */
     public static String readInput(String prompt, boolean allowEmpty) {
         String input;
@@ -64,6 +73,7 @@ public class InputHandler {
     }
 
     /**
+     * Reads a non-empty line of input from the user
      * @see #readInput(String, boolean)
      */
     public static String readInput(String prompt) {
@@ -108,6 +118,7 @@ public class InputHandler {
     }
 
     /**
+     * Reads a non-negative integer from the user.
      * @see #readInt(String, boolean)
      */
     public static int readInt(String prompt) {
@@ -189,8 +200,10 @@ public class InputHandler {
 
 
     /**
-     * Method to prompt the user (y/n) input and compares against those characters (case-insensitive).
-     * Valid inputs are either Y or N.
+     * Returns true if the user inputs 'y' and false if 'n'.
+     * 
+     * Prompts the user a (y/n) input and compares against those characters (case-insensitive).
+     * Valid inputs are either Y or N. Empty inputs are not allowed
      * 
      * @return true if y, false if n
      */
