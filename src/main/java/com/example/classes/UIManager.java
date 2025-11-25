@@ -533,22 +533,4 @@ class UIManager {
         String rend = asciiTable.render();
         System.out.println(rend);
     };
-
-    public static void buyMedicineUI() {
-        asciiTable = new AsciiTable();
-
-        asciiTable.addRule();
-        asciiTable.addRow("+ Buy Medicine +");
-        asciiTable.setTextAlignment(TextAlignment.CENTER);
-        asciiTable.addRule();
-        AT_Cell cell = asciiTable.addRow("> Which medicine would you like to buy?").getCells().get(0);
-        cell.getContext().setPadding(1);
-        cell.getContext().setTextAlignment(TextAlignment.CENTER);
-        asciiTable.addRule();
-
-        asciiTable.getContext().setWidth(166);
-
-        String rend = asciiTable.render();
-        System.out.println(rend);
-    }
 }
