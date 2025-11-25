@@ -36,6 +36,7 @@ public class AsciiTableBuilder {
     }
 
     public String buildGenericMenuTable() {
+        // Validation checks
         if (header == null) {
             throw new IllegalStateException("Menu table is missing a header!");
         }
@@ -50,7 +51,7 @@ public class AsciiTableBuilder {
 
         // Add header
         at.addRule();
-        at.addRow(this.header)
+        at.addRow(header)
           .setTextAlignment(TextAlignment.CENTER);
         at.addRule();
 
@@ -64,7 +65,7 @@ public class AsciiTableBuilder {
         at.addRule();
 
         // Add footer
-        at.addRow(this.footer)
+        at.addRow(footer)
           .setPadding(1)
           .setPaddingLeft(7);
         at.addRule();
