@@ -42,7 +42,7 @@ public class Database {
 
             return paths;
         } catch (IOException e) {
-            e.printStackTrace();
+            MessageLog.addMessage("[ERROR]: " + getCustomersDatabasePath().toAbsolutePath() + " is missing!");
         }
 
         return null;
@@ -64,7 +64,7 @@ public class Database {
         try {
             Files.deleteIfExists(file);
         } catch (IOException e) {
-            System.err.println("[ERROR]: File operation occured.");
+            MessageLog.addMessage("[ERROR]: File operation occured.");
         }
 
         // remove tracking either way
@@ -117,10 +117,10 @@ public class Database {
                 objectMapper.writeValue(permanent.toFile(), data);
             }
 
-            System.out.println("Data successfully written to " + permanent.toAbsolutePath());
+            MessageLog.addMessage("[SUCCESS]: " + permanent + " updated successfully!");
 
         } catch (IOException e) {
-            System.err.println("[ERROR]: Failed to write file:\n" + e);
+            MessageLog.addMessage("[ERROR]: Failed to write file:\n" + e);
             try { Files.deleteIfExists(temporary); } catch (IOException ignored) {}
         }
     }
@@ -129,7 +129,7 @@ public class Database {
         Path path = basePath.resolve(data.getName() + ".json");
 
         if (Files.exists(path)) {
-            System.err.println("[ERROR]: " + path + " already exists!");
+            MessageLog.addMessage("[ERROR]: " + path + " already exists!");
             return;
         }
 
@@ -137,7 +137,7 @@ public class Database {
             Files.createFile(path);
             serialize(data, path);
         } catch (IOException e) {
-            System.err.println("[ERROR]: Cannot create " + path);
+            MessageLog.addMessage("[ERROR]: Cannot create " + path);
         }
     }
 

@@ -23,6 +23,7 @@ class UIManager {
             UIManager.displayProgramLogo();
             UIManager.clearScreen();
             UIManager.displayChooseAccountMenu();
+            MessageLog.displayAll();
 
             // ask user which account to login
             int accountChoice = InputHandler.getValidChoice(AccountType.getValues());
@@ -326,7 +327,8 @@ class UIManager {
     }
 
     public static boolean retryLogin() {
-        MessageLog.display("\n[ERROR] Login failed.");
+        MessageLog.displayAll();
+        MessageLog.display("\n[ERROR]: Login failed.");
         System.out.println("Enter anything to try again or enter 'q' to exit.");
         String input = InputHandler.readInput("\nEnter Choice >> ", true);
         if (input.equals("q")) { return false; }
