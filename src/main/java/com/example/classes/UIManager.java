@@ -1,15 +1,13 @@
 package com.example.classes;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 
 import com.example.classes.MenuOption.*; // Import all enums
-
-import de.vandermeer.asciitable.AsciiTable;
-import de.vandermeer.asciitable.CWC_LongestLine;
-
 // UI class for design
 class UIManager {
-    private static AsciiTable asciiTable;
 
     public static void clearScreen() {
         // try {
@@ -22,6 +20,7 @@ class UIManager {
     // Start menu, guides the user which account to pick (or logout)
     public static void chooseAccountMenu() {
         while (true) {
+            UIManager.displayProgramLogo();
             UIManager.clearScreen();
             UIManager.displayChooseAccountMenu();
 
@@ -55,19 +54,13 @@ class UIManager {
         UIManager.routeToAccountMenu(account);
     }
 
-    public static void displayCustomerMenu(Customer customer) {
-        String table = new AsciiTableBuilder()
-                .setHeader("+ Customer Menu +")
-                .setRows("1. Buy Medicine", "2. View Account Details", "3. Deposit Funds")
-                .setFooter("0. Logout")
-                .buildGenericMenuTable();
+    public static void runCustomerMenu(Customer customer) {
         boolean continueMenuLoop = true;
 
         do {
             // Clear screen when entering
             UIManager.clearScreen();
-            // Render table
-            System.out.println(table);
+            UIManager.displayCustomerMenu();
             // Display any error messages
             MessageLog.displayNext();
 
@@ -96,26 +89,14 @@ class UIManager {
         } while (continueMenuLoop);
     }
 
-    public static void displayPharmacyMenu(Pharmacy pharmacy) {
-        String[] rows = {
-                "1. Add Medicine",
-                "2. Show List of Medicines",
-                "3. Update Medicine Amount",
-                "4. Update Medicine Price",
-                "5. Delete Medicine"
-        };
-        String table = new AsciiTableBuilder()
-                .setHeader("+ Pharmacy Menu +")
-                .setRows(rows)
-                .setFooter("0. Logout")
-                .buildGenericMenuTable();
+    public static void runPharmacyMenu(Pharmacy pharmacy) {
         boolean continueMenuLoop = true;
 
         do {
             // Clear screen at start of every loop
             UIManager.clearScreen();
             // Render table menu
-            System.out.println(table);
+            UIManager.displayPharmacyMenu();
             // Display any errors
             MessageLog.displayAll();
 
@@ -233,25 +214,13 @@ class UIManager {
         } while (continueMenuLoop);
     }
 
-    public static void displayAdminMenu(Admin admin) {
-        String[] rows = {
-            "1. Register A Customer",
-            "2. Show List Of Customers",
-            "3. Edit Customer Credentials",
-            "4. Edit Pharmacy Credentials",
-            "5. Delete Customer"
-        };
-        String table = new AsciiTableBuilder()
-                    .setHeader("+ Admin Menu +")
-                    .setRows(rows)
-                    .setFooter("0. Exit")
-                    .buildGenericMenuTable();
+    public static void runAdminMenu(Admin admin) {
         boolean continueMenuLoop = true;
 
         do {
             UIManager.clearScreen();
             // Print table and any error message
-            System.out.println(table);
+            UIManager.displayAdminMenu();
             MessageLog.displayAll();
 
             // Valid choices
@@ -345,55 +314,31 @@ class UIManager {
         } while (continueMenuLoop);
     }
 
-    private static void displayCustomerTable(List<Customer> accounts) {
-        asciiTable = new AsciiTable();
-
-        // 2. [WIDTH] Use LongestLine renderer
-        asciiTable.getRenderer().setCWC(new CWC_LongestLine());
-
-        // Header
-        asciiTable.addRule();
-        asciiTable.addRow("Position #", "Name", "Username", "Password", "Funds");
-        asciiTable.addRule();
-
-        int indexCounter = 0;
-        for (Customer customer : accounts) {
-            asciiTable.addRow(
-                indexCounter, customer.getName(), customer.getUsername(), 
-                customer.getPassword(), customer.getFunds()
-            );
-            asciiTable.addRule();
-            indexCounter++;
+    public static void routeToAccountMenu(Account account) {
+        // Call respective Account menu
+        if (account instanceof Customer) {
+            runCustomerMenu((Customer) account);
+        } else if (account instanceof Pharmacy) {
+            runPharmacyMenu((Pharmacy) account);
+        } else if (account instanceof Admin) {
+            runAdminMenu((Admin) account);
         }
+    }
 
-        asciiTable.setPadding(2);
+    public static boolean retryLogin() {
+        MessageLog.display("\n[ERROR] Login failed.");
+        System.out.println("Enter anything to try again or enter 'q' to exit.");
+        String input = InputHandler.readInput("\nEnter Choice >> ", true);
+        if (input.equals("q")) { return false; }
+        return true;
+    }
 
-        // Render and print
-        String rend = asciiTable.render();
-        System.out.println(rend);
+    private static void displayCustomerTable(List<Customer> customers) {
+        System.out.println(AsciiTableBuilder.buildCustomerTable(customers));
     }
 
     public static void displayMedicineTable(List<Medicine> medicines) {
-        asciiTable = new AsciiTable();
-
-        // Header
-        asciiTable.addRule();
-        asciiTable.addRow("Position #", "Name", "Price", "Amount", "Brand", "Expires At", "Purpose");
-        asciiTable.addRule();
-
-        int indexCounter = 0;
-        for (Medicine medicine : medicines) {
-            asciiTable.addRow(
-                indexCounter, medicine.getName(), medicine.getPrice(), medicine.getAmount(),
-                medicine.getBrand(), medicine.getExpirationDate(), medicine.getPurpose()
-            );
-            asciiTable.addRule();
-            indexCounter++;
-        }
-
-        // Render and print table to console
-        String rend = asciiTable.render();
-        System.out.println(rend);
+        System.out.println(AsciiTableBuilder.buildMedicineTable(medicines));
     };
     
     // METHODS CREATED DURING REFACTORIZATION
@@ -411,22 +356,55 @@ class UIManager {
         System.out.println(AsciiTableBuilder.buildSingleRow("+ Login +"));
     }
 
-    public static void routeToAccountMenu(Account account) {
-        // Call respective Account menu
-        if (account instanceof Customer) {
-            displayCustomerMenu((Customer) account);
-        } else if (account instanceof Pharmacy) {
-            displayPharmacyMenu((Pharmacy) account);
-        } else if (account instanceof Admin) {
-            displayAdminMenu((Admin) account);
-        }
+    public static void displayCustomerMenu() {
+        String table = new AsciiTableBuilder()
+        .setHeader("+ Customer Menu +")
+        .setRows("1. Buy Medicine", "2. View Account Details", "3. Deposit Funds")
+        .setFooter("0. Logout")
+        .buildGenericMenuTable();
+
+        System.out.println(table);
     }
 
-    public static boolean retryLogin() {
-        MessageLog.display("\n[ERROR] Login failed.");
-        System.out.println("Enter anything to try again or enter 'q' to exit.");
-        String input = InputHandler.readInput("\nEnter Choice >> ", true);
-        if (input.equals("q")) { return false; }
-        return true;
+    public static void displayPharmacyMenu() {
+        String[] rows = {
+                "1. Add Medicine",
+                "2. Show List of Medicines",
+                "3. Update Medicine Amount",
+                "4. Update Medicine Price",
+                "5. Delete Medicine"
+        };
+        String table = new AsciiTableBuilder()
+                .setHeader("+ Pharmacy Menu +")
+                .setRows(rows)
+                .setFooter("0. Logout")
+                .buildGenericMenuTable();
+
+        System.out.println(table);
+    }
+
+    public static void displayAdminMenu() {
+        String[] rows = {
+            "1. Register A Customer",
+            "2. Show List Of Customers",
+            "3. Edit Customer Credentials",
+            "4. Edit Pharmacy Credentials",
+            "5. Delete Customer"
+        };
+        String table = new AsciiTableBuilder()
+                    .setHeader("+ Admin Menu +")
+                    .setRows(rows)
+                    .setFooter("0. Exit")
+                    .buildGenericMenuTable();
+
+        System.out.println(table);
+    }
+
+    public static void displayProgramLogo() {
+        try {
+            System.out.println(Files.readString(Path.of("accounts", "title.txt")));
+        } catch (IOException e) {
+            System.err.println("[ERROR]: Failed to logo.");
+        }
     }
 }

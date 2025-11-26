@@ -5,6 +5,7 @@ import de.vandermeer.skb.interfaces.transformers.textformat.TextAlignment;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 public class AsciiTableBuilder {
@@ -108,4 +109,44 @@ public class AsciiTableBuilder {
 
         return at.render();
     } 
+
+    public static String buildMedicineTable(List<Medicine> medicines) {
+        AsciiTable asciiTable = new AsciiTable();
+
+        asciiTable.addRule();
+        asciiTable.addRow("Position #", "Name", "Price", "Amount", "Brand", "Expires At", "Purpose");
+        asciiTable.addRule();
+
+        int indexCounter = 0;
+        for (Medicine medicine : medicines) {
+            asciiTable.addRow(
+                indexCounter, medicine.getName(), medicine.getPrice(), medicine.getAmount(),
+                medicine.getBrand(), medicine.getExpirationDate(), medicine.getPurpose()
+            );
+            asciiTable.addRule();
+            indexCounter++;
+        }
+
+        return asciiTable.render();
+    }
+
+    public static String buildCustomerTable(List<Customer> customers) {
+        AsciiTable asciiTable = new AsciiTable();
+
+        asciiTable.addRule();
+        asciiTable.addRow("Position #", "Name", "Username", "Password", "Funds");
+        asciiTable.addRule();
+
+        int indexCounter = 0;
+        for (Customer customer : customers) {
+            asciiTable.addRow(
+                indexCounter, customer.getName(), customer.getUsername(), 
+                customer.getPassword(), customer.getFunds()
+            );
+            asciiTable.addRule();
+            indexCounter++;
+        }
+
+        return asciiTable.render();
+    }
 }
