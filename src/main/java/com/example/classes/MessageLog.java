@@ -3,6 +3,10 @@ package com.example.classes;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Formats messages into either success or error messages for logging purposes
+ * 
+ */
 public class MessageLog {
     private static List<String> messages = new ArrayList<>();
 
@@ -16,10 +20,16 @@ public class MessageLog {
     }
 
     /**
-     * Method to display all error messages and clears the list
+     * Method to add a success message to message List
+     * 
+     * @param message the success message to add
+     */
     public static void addSuccess(String message) {
         if (!message.isEmpty()) { messages.add("\n[SUCCESS]: " + message); }
     }
+
+    /**
+     * Method to display all message logs and clears the list
      * 
      */
     public static void displayAll() {
