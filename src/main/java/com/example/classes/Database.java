@@ -99,29 +99,28 @@ public class Database {
 
     // Method to safely write changes to file
     private static void serialize(Account data, Path permanent) {
-        Path temporary = permanent.resolveSibling(".tmp");
-
         try {
-            // Ensure directory exists
-            if (permanent.getParent() != null)
-                Files.createDirectories(permanent.getParent());
+            // System.out.println("path=" + permanent + " exists=" + Files.exists(permanent) + " isRegularFile=" + Files.isRegularFile(permanent));
+            if (permanent.getParent() != null) Files.createDirectories(permanent.getParent());
 
-            boolean exists = Files.exists(permanent);
+            boolean exists = Files.isRegularFile(permanent);
+
+            Path temporary = permanent.resolveSibling(permanent.getFileName().toString() + ".tmp");
 
             if (exists) {
-                // SAFE UPDATE: temp + atomic move
+                // write to temp then atomically replace
                 objectMapper.writeValue(temporary.toFile(), data);
-                Files.move(temporary, permanent, StandardCopyOption.REPLACE_EXISTING);
+                Files.move(temporary, permanent, StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE);
+                MessageLog.addMessage("[SUCCESS]: " + permanent + " updated successfully!");
             } else {
-                // NEW FILE: write directly
+                // new file: write directly
                 objectMapper.writeValue(permanent.toFile(), data);
+                MessageLog.addMessage("[SUCCESS]: " + permanent + " created successfully!");
             }
-
-            MessageLog.addMessage("[SUCCESS]: " + permanent + " updated successfully!");
-
         } catch (IOException e) {
             MessageLog.addMessage("[ERROR]: Failed to write file:\n" + e);
-            try { Files.deleteIfExists(temporary); } catch (IOException ignored) {}
+            try { Files.deleteIfExists(permanent.resolveSibling(permanent.getFileName().toString() + ".tmp")); }
+            catch (IOException ignored) {}
         }
     }
 
@@ -133,12 +132,7 @@ public class Database {
             return;
         }
 
-        try {
-            Files.createFile(path);
-            serialize(data, path);
-        } catch (IOException e) {
-            MessageLog.addMessage("[ERROR]: Cannot create " + path);
-        }
+        serialize(data, path);
     }
 
     // Getters
