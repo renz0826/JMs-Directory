@@ -148,14 +148,6 @@ public class Customer extends Account {
                     continue;
                 }
             }
-
-            // Display after buying 
-            UIManager.clearScreen();
-            String message = "Would you like to buy another medicine? (y/n)";
-            System.out.println(AsciiTableBuilder.buildSingleRow(message));
-    
-            if (InputHandler.promptYesOrNo()) { continue; }
-            else { break; }
         } while (true);
     }
 
