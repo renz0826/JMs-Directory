@@ -20,8 +20,8 @@ class UIManager {
     // Start menu, guides the user which account to pick (or logout)
     public static void chooseAccountMenu() {
         while (true) {
-            UIManager.displayProgramLogo();
             UIManager.clearScreen();
+            UIManager.displayProgramLogo();
             UIManager.displayChooseAccountMenu();
             MessageLog.displayAll();
 
@@ -69,7 +69,10 @@ class UIManager {
             int choice = InputHandler.getValidChoice(CustomerOperation.getValues());
 
             switch (choice) {
-                case CustomerOperation.BUY_MEDICINE -> customer.buyMedicine();
+                case CustomerOperation.BUY_MEDICINE -> {
+                    UIManager.clearScreen();
+                    customer.buyMedicine();
+                }
                 case CustomerOperation.VIEW_ACCOUNT_DETAILS -> customer.viewAccountDetails();
                 case CustomerOperation.DEPOSIT_FUNDS -> {
                     boolean stayingInAddMenu = true;
