@@ -1,4 +1,4 @@
-package com.example.classes;
+package com.jmpharmacyims.classes;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -6,7 +6,7 @@ import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 import java.util.Set;
 
-import com.example.classes.TextColor.Color;
+import com.jmpharmacyims.classes.TextColor.Color;
 
 import java.lang.Math;
 

@@ -1,12 +1,12 @@
-package com.example.classes;
+package com.jmpharmacyims.classes;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 
-import com.example.classes.MenuOption.*; // Import all enums
-import com.example.classes.TextColor.Color;
+import com.jmpharmacyims.classes.MenuOption.*;
+import com.jmpharmacyims.classes.TextColor.Color;
 // UI class for design
 class UIManager {
 

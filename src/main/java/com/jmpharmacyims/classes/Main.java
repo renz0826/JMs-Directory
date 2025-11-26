@@ -1,4 +1,4 @@
-package com.example.classes;
+package com.jmpharmacyims.classes;
 
 public class Main {
     public static void main(String[] args) {        

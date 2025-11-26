@@ -1,4 +1,4 @@
-package com.example.classes;
+package com.jmpharmacyims.classes;
 
 // Base class account
 public class Account{

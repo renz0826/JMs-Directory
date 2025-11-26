@@ -1,4 +1,4 @@
-package com.example.classes;
+package com.jmpharmacyims.classes;
 
 import java.io.IOException;
 import java.nio.file.DirectoryStream;

@@ -1,11 +1,11 @@
-package com.example.classes;
+package com.jmpharmacyims.classes;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.example.classes.TextColor.Color;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.jmpharmacyims.classes.TextColor.Color;
 
 public class Customer extends Account {
     private List<Medicine> medicines;

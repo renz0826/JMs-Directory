@@ -1,4 +1,4 @@
-package com.example.classes;
+package com.jmpharmacyims.classes;
 
 /**
  * Utility class for applying colors to console text

@@ -1,4 +1,4 @@
-package com.example.classes;
+package com.jmpharmacyims.classes;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
