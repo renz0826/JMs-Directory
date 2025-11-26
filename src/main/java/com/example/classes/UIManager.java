@@ -10,11 +10,11 @@ import com.example.classes.MenuOption.*; // Import all enums
 class UIManager {
 
     public static void clearScreen() {
-        // try {
-        //     new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
-        // } catch (Exception e) {
-        //     System.out.println(e);
-        // }
+        try {
+            new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+        } catch (Exception e) {
+            System.out.println(e);
+        }
     }
 
     // Start menu, guides the user which account to pick (or logout)
