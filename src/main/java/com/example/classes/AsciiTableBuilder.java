@@ -148,4 +148,22 @@ public class AsciiTableBuilder {
 
         return asciiTable.render();
     }
+
+    public static String buildCustomerAccountDetails(Customer customer) {
+        AsciiTable at = new AsciiTable();
+
+        at.addRule();
+        at.addRow("Name", customer.getName());
+        at.addRule();
+        at.addRow("Username", customer.getUsername());
+        at.addRule();
+        at.addRow("Current Balance", String.format("PHP %,.2f", customer.getFunds()));
+        at.addRule();
+
+        // Styling for Data
+        at.setTextAlignment(TextAlignment.LEFT);
+        at.setPadding(1);
+
+        return at.render();
+    }
 }

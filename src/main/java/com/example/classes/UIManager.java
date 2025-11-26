@@ -408,4 +408,10 @@ class UIManager {
             System.err.println("[ERROR]: Failed to logo.");
         }
     }
+
+    public static void displayCustomerAccountDetails(Customer customer) {
+        System.out.println(AsciiTableBuilder.buildSingleRow("+ Account Details +"));
+        System.out.println(AsciiTableBuilder.buildCustomerAccountDetails(customer));
+        System.out.println(AsciiTableBuilder.buildSingleRow("+ Medicine Cabinet +"));
+    }
 }
