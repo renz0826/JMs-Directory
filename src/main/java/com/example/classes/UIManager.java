@@ -341,7 +341,6 @@ class UIManager {
         System.out.println(AsciiTableBuilder.buildMedicineTable(medicines));
     };
     
-    // METHODS CREATED DURING REFACTORIZATION
     public static void displayChooseAccountMenu() {
         String table = new AsciiTableBuilder()
         .setHeader("+ Select Account Type +")
