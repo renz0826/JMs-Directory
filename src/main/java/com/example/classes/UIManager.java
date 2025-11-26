@@ -402,7 +402,7 @@ class UIManager {
 
     public static void displayProgramLogo() {
         try {
-            System.out.println(Files.readString(Path.of("accounts", "title.txt")));
+            System.out.println(Files.readString(Path.of("assets", "title.txt")));
         } catch (IOException e) {
             System.err.println("[ERROR]: Failed to logo.");
         }
