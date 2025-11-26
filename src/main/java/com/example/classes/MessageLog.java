@@ -3,9 +3,7 @@ package com.example.classes;
 import java.util.ArrayList;
 import java.util.List;
 
-// NOTE: Consider renaming this class to LogHandler to clarify that it handles log messages 
 public class MessageLog {
-    // NOTE: Consider refactoring this into a Queue if message priority is truly necessary
     private static List<String> errorMessages = new ArrayList<>();
 
     /**
