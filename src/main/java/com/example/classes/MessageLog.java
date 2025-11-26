@@ -4,51 +4,46 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MessageLog {
-    private static List<String> errorMessages = new ArrayList<>();
+    private static List<String> messages = new ArrayList<>();
 
     /**
      * Method to add an error message to message List
      * 
      * @param message the error message to add
      */
-    public static void addMessage(String message) {
-        if (!message.isEmpty()) { errorMessages.add(message); }
+    public static void addError(String message) {
+        if (!message.isEmpty()) { messages.add("\n[ERROR]: " + message); }
     }
 
     /**
      * Method to display all error messages and clears the list
+    public static void addSuccess(String message) {
+        if (!message.isEmpty()) { messages.add("\n[SUCCESS]: " + message); }
+    }
      * 
      */
     public static void displayAll() {
-        if (!errorMessages.isEmpty()) {
+        if (!messages.isEmpty()) {
             List<String> toRemove = new ArrayList<>();
 
-            for (String message : errorMessages) {
+            for (String message : messages) {
                 System.err.println(message);
                 toRemove.add(message);
             }
 
-            errorMessages.removeAll(toRemove);
+            messages.removeAll(toRemove);
         }
     }
 
     /**
-     * Method to display the next error message and removes it immediately from the list
+     * Method to display the next message log and removes it immediately from the list
      * 
      */
     public static void displayNext() {
-        if (!errorMessages.isEmpty()) {
-            String next = errorMessages.getFirst();
+        if (!messages.isEmpty()) {
+            String next = messages.getFirst();
             System.err.println(next);
-            errorMessages.remove(next);
+            messages.remove(next);
         }
-    }
-
-    /**
-     * Method to display a given message using System.err.out without storing it in the list
-     * 
-     */
-    public static void display(String errorMessage) {
-        System.err.println(errorMessage);
     }
 }
