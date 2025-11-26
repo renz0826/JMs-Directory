@@ -61,4 +61,17 @@ public class AuthService {
         
         return null;
     }
+
+    // METHODS CREATED DURING REFACTORIZATION
+    public static Account verifyCredentials(String username, String password, int accountChoice) {
+        return switch (accountChoice) {
+            case MenuOption.AccountType.CUSTOMER ->
+                AuthService.logInCustomer(username, password);
+            case MenuOption.AccountType.PHARMACY ->
+                AuthService.logInPharmacy(username, password);
+            case MenuOption.AccountType.ADMIN ->
+                AuthService.logInAdmin(username, password);
+            default -> null;
+        };
+    }
 }

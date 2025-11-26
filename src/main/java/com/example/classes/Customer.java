@@ -150,7 +150,7 @@ public class Customer extends Account {
             }
 
             // Display after buying 
-            UIManager.clear();
+            UIManager.clearScreen();
             String message = "Would you like to buy another medicine? (y/n)";
             System.out.println(AsciiTableBuilder.buildSingleRow(message));
     
@@ -160,7 +160,7 @@ public class Customer extends Account {
     }
 
     public void viewAccountDetails() {
-        UIManager.clear();
+        UIManager.clearScreen();
         // ==========================================
         // PART 1: The Title (1 Column Table)
         // ==========================================
@@ -221,7 +221,7 @@ public class Customer extends Account {
     }
 
     public void depositFunds() {
-        UIManager.clear();
+        UIManager.clearScreen();
         String popUp = new AsciiTableBuilder()
                 .setHeader("+ Deposit Funds +")
                 .setRow("> How much would you like to deposit?")

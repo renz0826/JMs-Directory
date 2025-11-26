@@ -3,19 +3,16 @@ package com.example.classes;
 import java.util.List;
 import java.util.Set;
 
+import com.example.classes.MenuOption.*; // Import all enums
+
 import de.vandermeer.asciitable.AsciiTable;
 import de.vandermeer.asciitable.CWC_LongestLine;
 
 // UI class for design
 class UIManager {
-    private enum AccountType {
-        CUSTOMER,
-        PHARMACY,
-        ADMIN
-    }
     private static AsciiTable asciiTable;
 
-    public static void clear() {
+    public static void clearScreen() {
         // try {
         //     new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
         // } catch (Exception e) {
@@ -23,85 +20,40 @@ class UIManager {
         // }
     }
 
-    // Login choice method
-    public static void displayLoginChoice() {
-        String table = new AsciiTableBuilder()
-                .setHeader("+ Select Account Type +")
-                .setRows("1. Customer", "2. Pharmacy", "3. Admin")
-                .setFooter("0. Exit")
-                .buildGenericMenuTable();
-
-        // Login loop
+    // Start menu, guides the user which account to pick (or logout)
+    public static void chooseAccountMenu() {
         while (true) {
-            UIManager.clear();
-            // Render Table
-            System.out.println(table);
-
-            Account authenticated = null;
-            AccountType accountType;
+            UIManager.clearScreen();
+            UIManager.displayChooseAccountMenu();
 
             // ask user which account to login
-            accountType = switch (InputHandler.getValidChoice(Set.of(3, 2, 1, 0))) {
-                case 1 ->
-                    AccountType.CUSTOMER;
-                case 2 ->
-                    AccountType.PHARMACY;
-                case 3 ->
-                    AccountType.ADMIN;
-                case 0 -> {
-                    System.out.println("\nExiting...");
-                    yield null;
-                }
-                default ->
-                    null;
-            };
-
-            if (accountType == null) {
-                break;
-            }
-
-            // prompt user credentials
-            while (authenticated == null) {
-
-                UIManager.clear();
-                System.out.println(AsciiTableBuilder.buildSingleRow("+ Login +"));
-                String promptUsername = "\nEnter Username\nUsername >> ";
-                String promptPassword = "\nEnter Password\nPassword >> ";
-                String username = InputHandler.readInput(promptUsername);
-                String password = InputHandler.readInput(promptPassword);
-
-                // verify credentials
-                authenticated = switch (accountType) {
-                    case CUSTOMER ->
-                        AuthService.logInCustomer(username, password);
-                    case PHARMACY ->
-                        AuthService.logInPharmacy(username, password);
-                    case ADMIN ->
-                        AuthService.logInAdmin(username, password);
-                };
-
-                if (authenticated == null) {
-                    ErrorMessage.display("\n[ERROR] Login failed.");
-                    System.out.println("Enter anything to try again or enter 'q' to exit.");
-                    String input = InputHandler.readInput("\nEnter Choice >> ", true);
-                    if (input.equals("q")) {
-                        break;
-                    }
-                }
-
-            }
-
-            // Call respective Account menu
-            if (authenticated instanceof Customer) {
-                displayCustomerMenu((Customer) authenticated);
-            } else if (authenticated instanceof Pharmacy) {
-                displayPharmacyMenu((Pharmacy) authenticated);
-            } else if (authenticated instanceof Admin) {
-                displayAdminMenu((Admin) authenticated);
-            }
-
+            int accountChoice = InputHandler.getValidChoice(AccountType.getValues());
+            if (accountChoice == MenuOption.AccountType.LOGOUT) { break; }
+            UIManager.login(accountChoice);
         }
+    }
 
+    // Login menu, happens after choosing an account 
+    public static void login(int accountChoice) {
+        Account account;
+
+        do {
+            UIManager.clearScreen();
+            UIManager.displayLoginTitle();
+            
+            // Prompt user credentials
+            String username = InputHandler.readInput("\nEnter Username\nUsername >> ");
+            String password = InputHandler.readInput("\nEnter Password\nPassword >> ");
+            account = AuthService.verifyCredentials(username, password, accountChoice);
+
+            // A null account means verification failed
+            if (account == null) {
+                boolean continueToAttemptLogin = UIManager.retryLogin();
+                if (!continueToAttemptLogin) { return; }
+            }
+        } while (account == null);
+
+        UIManager.routeToMenu(account);
     }
 
     public static void displayCustomerMenu(Customer customer) {
@@ -114,19 +66,19 @@ class UIManager {
 
         do {
             // Clear screen when entering
-            UIManager.clear();
+            UIManager.clearScreen();
             // Render table
             System.out.println(table);
             // Display any error messages
             ErrorMessage.displayNext();
 
             // Get valid choices from user
-            int choice = InputHandler.getValidChoice(Set.of(4, 3, 2, 1, 0));
+            int choice = InputHandler.getValidChoice(CustomerOperation.getValues());
 
             switch (choice) {
-                case 1 -> customer.buyMedicine();
-                case 2 -> customer.viewAccountDetails();
-                case 3 -> {
+                case CustomerOperation.BUY_MEDICINE -> customer.buyMedicine();
+                case CustomerOperation.VIEW_ACCOUNT_DETAILS -> customer.viewAccountDetails();
+                case CustomerOperation.DEPOSIT_FUNDS -> {
                     boolean stayingInAddMenu = true;
                     do {
                         // 1. Perform the action FIRST
@@ -137,7 +89,7 @@ class UIManager {
                         else { stayingInAddMenu = false; }
                     } while (stayingInAddMenu);
                 }
-                case 0 -> {
+                case CustomerOperation.LOGOUT -> {
                     System.out.println("\nExiting...");
                     continueMenuLoop = false;
                 }
@@ -162,26 +114,26 @@ class UIManager {
 
         do {
             // Clear screen at start of every loop
-            UIManager.clear();
+            UIManager.clearScreen();
             // Render table menu
             System.out.println(table);
             // Display any errors
             ErrorMessage.displayAll();
 
             // Initialize choice
-            int mainChoice = InputHandler.getValidChoice(Set.of(5, 4, 3, 2, 1, 0));
+            int mainChoice = InputHandler.getValidChoice(PharmacyOperation.getValues());
 
             // Handle Main Menu Actions
             switch (mainChoice) {
-                case 0 -> {
+                case PharmacyOperation.LOGOUT -> {
                     System.out.println("\nLogging out...");
                     continueMenuLoop = false;
                 }
-                case 1 -> {
+                case PharmacyOperation.ADD_MEDICINE -> {
                     // --- SUB MENU LOOP ---
                     do {
                         pharmacy.addMedicine(); // 1. Perform the action FIRST
-                        UIManager.clear();
+                        UIManager.clearScreen();
                         String message = "Would you like to add another medicine? (y/n)";
                         System.out.println(AsciiTableBuilder.buildSingleRow(message));
 
@@ -189,7 +141,7 @@ class UIManager {
                         else break;
                     } while (true);
                 }
-                case 2 -> {
+                case PharmacyOperation.SHOW_MEDICINE_LIST -> {
                     // display all medicines once
                     List<Medicine> medicines = pharmacy.getMedicines();
                     
@@ -211,10 +163,13 @@ class UIManager {
                             medicines = found;
                         }
                     } while (true);
-                    UIManager.clear();
+                    UIManager.clearScreen();
                 }
-                // FOR UPDATE AND DELETE
-                case 3, 4, 5 -> {
+
+                case 
+                PharmacyOperation.UPDATE_MEDICINE_AMOUNT, 
+                PharmacyOperation.UPDATE_MEDICINE_PRICE, 
+                PharmacyOperation.DELETE_MEDICINE -> {
                     do {
                         List<Medicine> medicines = pharmacy.getMedicines();
                         displayMedicineTable(medicines);
@@ -257,10 +212,10 @@ class UIManager {
                             continue;
                         }
 
-                        if (mainChoice == 3) {
+                        if (mainChoice == PharmacyOperation.UPDATE_MEDICINE_AMOUNT) {
                             int amount = InputHandler.readInt("Enter amount >> ", true);
                             pharmacy.updateMedicineAmount(targetName, amount);
-                        } else if (mainChoice == 4) {
+                        } else if (mainChoice == PharmacyOperation.UPDATE_MEDICINE_PRICE) {
                             double amount = InputHandler.readDouble("Enter new price >> ");
                             pharmacy.updateMedicinePrice(targetName, amount);
                         } else {
@@ -295,17 +250,17 @@ class UIManager {
         boolean continueMenuLoop = true;
 
         do {
-            UIManager.clear();
+            UIManager.clearScreen();
             // Print table and any error message
             System.out.println(table);
             ErrorMessage.displayAll();
 
             // Valid choices
-            int choice = InputHandler.getValidChoice(Set.of(8, 7, 6, 5, 4, 3, 2, 1, 0));
+            int choice = InputHandler.getValidChoice(AdminOperation.getValues());
             
             switch (choice) {
-                case 1 -> admin.addCustomerAccount();
-                case 2 -> {
+                case AdminOperation.REGISTER_CUSTOMER -> admin.addCustomerAccount();
+                case AdminOperation.SHOW_CUSTOMER_LIST -> {
                     List<Customer> customers = admin.getCustomers();
                     
                     do {
@@ -328,7 +283,9 @@ class UIManager {
                     } while (true);
                 }
                 // Customer update or delete
-                case 3, 5 -> {
+                case 
+                AdminOperation.UPDATE_CUSTOMER_CREDENTIALS, 
+                AdminOperation.DELETE_CUSTOMER -> {
                     List<Customer> customers = admin.getCustomers();
 
                     do {
@@ -370,7 +327,7 @@ class UIManager {
                             continue;
                         }
 
-                        if (choice == 3) { 
+                        if (choice == AdminOperation.UPDATE_CUSTOMER_CREDENTIALS) { 
                             admin.updateCustomerDetails(targetName); 
                         } else {
                             String message = "Are you sure you want to delete " + targetName + "? (y/n)";
@@ -380,8 +337,8 @@ class UIManager {
                         }
                     } while (true);
                 }
-                case 4 -> admin.updatePharmacyDetails();
-                case 0 -> {
+                case AdminOperation.UPDATE_PHARMACY_CREDENTIALS -> admin.updatePharmacyDetails();
+                case AdminOperation.LOGOUT -> {
                     System.out.println("\nExiting...");
                     continueMenuLoop = false;
                 }
@@ -439,4 +396,38 @@ class UIManager {
         String rend = asciiTable.render();
         System.out.println(rend);
     };
+    
+    // METHODS CREATED DURING REFACTORIZATION
+    public static void displayChooseAccountMenu() {
+        String table = new AsciiTableBuilder()
+        .setHeader("+ Select Account Type +")
+        .setRows("1. Customer", "2. Pharmacy", "3. Admin")
+        .setFooter("0. Exit")
+        .buildGenericMenuTable();
+
+        System.out.println(table);
+    }
+
+    public static void displayLoginTitle() {
+        System.out.println(AsciiTableBuilder.buildSingleRow("+ Login +"));
+    }
+
+    public static void routeToMenu(Account account) {
+        // Call respective Account menu
+        if (account instanceof Customer) {
+            displayCustomerMenu((Customer) account);
+        } else if (account instanceof Pharmacy) {
+            displayPharmacyMenu((Pharmacy) account);
+        } else if (account instanceof Admin) {
+            displayAdminMenu((Admin) account);
+        }
+    }
+
+    public static boolean retryLogin() {
+        ErrorMessage.display("\n[ERROR] Login failed.");
+        System.out.println("Enter anything to try again or enter 'q' to exit.");
+        String input = InputHandler.readInput("\nEnter Choice >> ", true);
+        if (input.equals("q")) { return false; }
+        return true;
+    }
 }
