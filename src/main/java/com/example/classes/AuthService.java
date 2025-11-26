@@ -61,7 +61,6 @@ public class AuthService {
         return null;
     }
 
-    // METHODS CREATED DURING REFACTORIZATION
     public static Account verifyCredentials(String username, String password, int accountChoice) {
         return switch (accountChoice) {
             case MenuOption.AccountType.CUSTOMER ->
