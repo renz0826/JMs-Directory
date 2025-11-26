@@ -25,6 +25,7 @@ public class Admin extends Account {
     // CREATE
     // Method to create a new customer account
     public void addCustomerAccount() {
+        System.out.println(AsciiTableBuilder.buildSingleRow("+ Register A New Customer Account +"));
         System.out.println("Enter Customer details.");
         String name = InputHandler.readInput("Name >> ");
         String username = InputHandler.readInput("Username >> ");

@@ -243,12 +243,16 @@ class UIManager {
             int choice = InputHandler.getValidChoice(AdminOperation.getValues());
             
             switch (choice) {
-                case AdminOperation.REGISTER_CUSTOMER -> admin.addCustomerAccount();
+                case AdminOperation.REGISTER_CUSTOMER -> {
+                    UIManager.clearScreen();
+                    admin.addCustomerAccount();
+                }
                 case AdminOperation.SHOW_CUSTOMER_LIST -> {
                     List<Customer> customers = admin.getCustomers();
                     
                     do {
-                        // display once
+                        UIManager.clearScreen();
+                        System.out.println(AsciiTableBuilder.buildSingleRow("+ List Of Registered Customer Accounts +"));
                         displayCustomerTable(customers);
                         MessageLog.displayNext();
 
@@ -273,6 +277,13 @@ class UIManager {
                     List<Customer> customers = admin.getCustomers();
 
                     do {
+                        UIManager.clearScreen();
+                        // Display respective operation title
+                        if (choice == AdminOperation.UPDATE_CUSTOMER_CREDENTIALS) {
+                            System.out.println(AsciiTableBuilder.buildSingleRow("+ Update Customer Credentials +"));
+                        } else {
+                            System.out.println(AsciiTableBuilder.buildSingleRow("+ Remove A Customer Account +"));
+                        }
                         displayCustomerTable(customers);
                         MessageLog.displayNext();
 
@@ -321,7 +332,11 @@ class UIManager {
                         }
                     } while (true);
                 }
-                case AdminOperation.UPDATE_PHARMACY_CREDENTIALS -> admin.updatePharmacyDetails();
+                case AdminOperation.UPDATE_PHARMACY_CREDENTIALS -> {
+                    UIManager.clearScreen();
+                    System.out.println(AsciiTableBuilder.buildSingleRow("+ Update Pharmacy Credentials +"));
+                    admin.updatePharmacyDetails();
+                }
                 case AdminOperation.LOGOUT -> {
                     System.out.println("\nExiting...");
                     continueMenuLoop = false;
