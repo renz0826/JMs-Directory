@@ -6,17 +6,21 @@ import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 import java.util.Set;
 
+import com.example.classes.TextColor.Color;
+
 import java.lang.Math;
 
 // This class handles user input and input validation
 public class InputHandler {
-
     private static final Scanner SCAN = new Scanner(System.in);
+    private static String errorLabel = TextColor.apply("\n[ERROR]: ", Color.LIGHT_RED);
 
     // Private helper to check for EOF and exit gracefully
     private static void checkForEof() {
         if (!SCAN.hasNextLine()) {
-            System.out.println("\n[INFO] Input stream closed (EOF detected). Exiting...");
+            System.out.println(
+                TextColor.apply("\n[INFO]: ", Color.LIGHT_YELLOW) + 
+                "Input stream closed (EOF detected). Exiting...");
             close();
             System.exit(0); // Clean exit
         }
@@ -51,11 +55,11 @@ public class InputHandler {
                     return choice;
                 } else {
                     // Input is numeric but not allowed
-                    System.out.println("\nInvalid choice. \nAllowed: " + validChoices + "");
+                    System.err.println(errorLabel + "Invalid choice. \nAllowed: " + validChoices + "");
                 }
             } catch (NumberFormatException e) {
                 // If input is not numeric
-                System.out.println("\nInvalid input. \nPlease enter an integer.");
+                System.err.println(errorLabel + "Invalid input. \nPlease enter an integer.");
             }
         }
     }
@@ -78,7 +82,7 @@ public class InputHandler {
             input = safeNextLine(prompt);
 
             if (input.isEmpty() && !allowEmpty) {
-                System.err.println("\n[ERROR]: Input cannot be empty");    
+                System.err.println(errorLabel + "Input cannot be empty");    
                 continue;
             }
             return input;
@@ -117,15 +121,15 @@ public class InputHandler {
                 i = Integer.parseInt(input);
 
                 if (i < 0 && !allowNegative) {
-                    System.err.println("\n[ERROR]: Cannot be negative");
+                    System.err.println(errorLabel + "Cannot be negative");
                     continue;
                 }
 
                 return i;
             } catch (NumberFormatException e) {
-                System.err.println("\n[ERROR]: Input must be an integer.");
+                System.err.println(errorLabel + "Input must be an integer.");
             } catch (Exception e) {
-                System.err.println("\n[ERROR]: " + e);
+                System.err.println(errorLabel + e);
             }
         }
     }
@@ -162,15 +166,15 @@ public class InputHandler {
                 d = Double.parseDouble(input);
 
                 if (d < 0) {
-                    System.err.println("\n[ERROR]: Cannot be negative.");
+                    System.err.println(errorLabel + "Cannot be negative.");
                     continue;
                 }
 
                 return Math.round(d * 100.0) / 100.0;
             } catch (NumberFormatException e) {
-                System.err.println("\n[ERROR]: Input must be a number.");
+                System.err.println(errorLabel + "Input must be a number.");
             } catch (Exception e) {
-                System.err.println("\n[ERROR]: " + e);
+                System.err.println(errorLabel + e);
             }
         }
     }
@@ -200,13 +204,13 @@ public class InputHandler {
 
                 // If the date given is before or equal to today then reject it and prompt the user again
                 if (date.isEqual(today) || date.isBefore(today)) {
-                    System.err.println("\n[ERROR]: Medicine is already expired.");
+                    System.err.println(errorLabel + "Medicine is already expired.");
                     continue;
                 }
 
                 return date.format(format);
             } catch (DateTimeParseException e) {
-                System.err.println("\n[ERROR]: Incorrect date format. Use d/M/yyyy");
+                System.err.println(errorLabel + "Incorrect date format. Use d/M/yyyy");
             }
         }
     }

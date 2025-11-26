@@ -3,6 +3,7 @@ package com.example.classes;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.example.classes.TextColor.Color;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -56,9 +57,12 @@ public class Customer extends Account {
             MessageLog.displayAll();
             System.out.println("\n--- Current Balance: Php " + getFunds() + " ---");
 
-            System.out.println("\nInstructions: ");
-            System.out.println("- Select medicine by entering its ** position number **.");
-            System.out.println("- Search medicine by name or enter 'q' to exit.");
+            String instructions = """
+                    \nInstructions: 
+                    - Select medicine by entering its ** position number **.
+                    - Search medicine by name or enter 'q' to exit.
+                    """;
+            System.out.println(TextColor.apply(instructions, Color.LIGHT_YELLOW));
             String input = InputHandler.readInput("\nEnter input: >> ");
 
             if (input.equalsIgnoreCase("q")) return;

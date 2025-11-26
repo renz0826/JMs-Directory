@@ -3,6 +3,8 @@ package com.example.classes;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.example.classes.TextColor.Color;
+
 /**
  * Formats messages into either success or error messages for logging purposes
  * 
@@ -16,7 +18,10 @@ public class MessageLog {
      * @param message the error message to add
      */
     public static void addError(String message) {
-        if (!message.isEmpty()) { messages.add("\n[ERROR]: " + message); }
+        if (!message.isEmpty()) { 
+            String coloredLabel = TextColor.apply("\n[ERROR]: ", Color.LIGHT_RED);
+            messages.add(coloredLabel + message); 
+        }
     }
 
     /**
@@ -25,7 +30,10 @@ public class MessageLog {
      * @param message the success message to add
      */
     public static void addSuccess(String message) {
-        if (!message.isEmpty()) { messages.add("\n[SUCCESS]: " + message); }
+        if (!message.isEmpty()) { 
+            String coloredLabel = TextColor.apply("\n[SUCCESS]: ", Color.LIGHT_GREEN);
+            messages.add(coloredLabel + message); 
+        }
     }
 
     /**

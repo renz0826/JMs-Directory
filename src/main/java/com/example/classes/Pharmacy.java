@@ -3,6 +3,7 @@ package com.example.classes;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.example.classes.TextColor.Color;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -26,7 +27,7 @@ public class Pharmacy extends Account {
         // Prompt line and Input validation
         UIManager.clearScreen();
         System.out.println(AsciiTableBuilder.buildSingleRow("+ Add New Medicine +"));
-        System.out.println("Instructions: Enter medicine details.");
+        System.out.println(TextColor.apply("Instructions: Enter medicine details.", Color.LIGHT_YELLOW));
         String name = InputHandler.readInput("Name >> ");
         double price = InputHandler.readDouble("Price (PHP) >> ");
         int amount = InputHandler.readInt("Initial amount >> ");

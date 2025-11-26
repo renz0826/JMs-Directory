@@ -6,6 +6,7 @@ import java.nio.file.Path;
 import java.util.List;
 
 import com.example.classes.MenuOption.*; // Import all enums
+import com.example.classes.TextColor.Color;
 // UI class for design
 class UIManager {
 
@@ -434,9 +435,11 @@ class UIManager {
 
     public static void displayProgramLogo() {
         try {
-            System.out.println(Files.readString(Path.of("assets", "title.txt")));
+            String logo = Files.readString(Path.of("assets", "title.txt"));
+            System.out.println(TextColor.apply(logo, Color.LIGHT_GREEN));
         } catch (IOException e) {
-            System.err.println("[ERROR]: Failed to logo.");
+            MessageLog.addError("Failed to load logo.");
+            MessageLog.displayNext();
         }
     }
 
