@@ -5,7 +5,6 @@ import de.vandermeer.skb.interfaces.transformers.textformat.TextAlignment;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 
 public class AsciiTableBuilder {
