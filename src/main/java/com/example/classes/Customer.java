@@ -6,13 +6,7 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import de.vandermeer.asciitable.AsciiTable;
-import de.vandermeer.skb.interfaces.transformers.textformat.TextAlignment;
-
 public class Customer extends Account {
-
-    private static AsciiTable at;
-
     private List<Medicine> medicines;
     private double funds;
 
