@@ -46,7 +46,7 @@ class UIManager {
 
         do {
             UIManager.clearScreen();
-            UIManager.displayLoginTitle();
+            UIManager.displayTitle("+ Login +");
 
             // Prompt user credentials
             String username = InputHandler.readInput("\nEnter Username\nUsername >> ");
@@ -91,7 +91,6 @@ class UIManager {
                     do {
                         // 1. Perform the action FIRST
                         customer.depositFunds();
-                        MessageLog.displayAll();
                         // 2. Then ask what to do next
                         System.out.println(AsciiTableBuilder.buildSingleRow("Would you like to deposit again? (y/n)"));
                         if (InputHandler.promptYesOrNo()) {
@@ -433,6 +432,22 @@ class UIManager {
         System.out.println(table);
     }
 
+    public static void displayPopUp(String header, String prompt) {
+
+        String table = new AsciiTableBuilder()
+                .setHeader(header)
+                .setRow(">> " + prompt)
+                .buildGenericPopUpMenu();
+
+        table = table.replace(prompt, TextColor.apply(prompt, Color.WHITE));
+
+        table = table.replace(header, TextColor.apply(header, Color.LIGHT_GREEN));
+
+        table = table.replace(">>", TextColor.apply(">>", Color.WHITE));
+
+        System.out.println(table);
+    }
+
     public static void displayChooseAccountMenu() {
 
         String[][] items = {
@@ -444,8 +459,13 @@ class UIManager {
         UIManager.displayMenu("+ Select Account Type +", items, "Exit");
     }
 
-    public static void displayLoginTitle() {
-        System.out.println(AsciiTableBuilder.buildSingleRow("+ Login +"));
+    public static void displayTitle(String title) {
+
+        String table = TextColor.apply(AsciiTableBuilder.buildSingleRow(title), Color.WHITE);
+
+        table = table.replace(title, TextColor.apply(title, Color.LIGHT_GREEN));
+
+        System.out.println(table);
     }
 
     public static void displayCustomerMenu() {
@@ -496,8 +516,26 @@ class UIManager {
     }
 
     public static void displayCustomerAccountDetails(Customer customer) {
-        System.out.println(AsciiTableBuilder.buildSingleRow("+ Account Details +"));
+        UIManager.displayTitle("+ Account Details +");
         System.out.println(AsciiTableBuilder.buildCustomerAccountDetails(customer));
-        System.out.println(AsciiTableBuilder.buildSingleRow("+ Medicine Cabinet +"));
+        UIManager.displayTitle("+ Medicine Cabinet +");
+    }
+
+    public static void delay(int milliseconds) {
+        try {
+            Thread.sleep(milliseconds);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+    }
+
+    public static void loading(String label) {
+        System.out.print("\n" + label);
+        UIManager.delay(500);
+        System.out.print(".");
+        UIManager.delay(500);
+        System.out.print(".");
+        UIManager.delay(500);
+        System.out.print(".\n");
     }
 }
