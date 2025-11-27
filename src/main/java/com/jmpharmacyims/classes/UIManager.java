@@ -3,11 +3,16 @@ package com.jmpharmacyims.classes;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 
-import com.jmpharmacyims.classes.MenuOption.*;
+import com.jmpharmacyims.classes.MenuOption.AccountType;
+import com.jmpharmacyims.classes.MenuOption.AdminOperation;
+import com.jmpharmacyims.classes.MenuOption.CustomerOperation;
+import com.jmpharmacyims.classes.MenuOption.PharmacyOperation;
 import com.jmpharmacyims.classes.TextColor.Color;
 // UI class for design
+
 class UIManager {
 
     public static void clearScreen() {
@@ -22,13 +27,15 @@ class UIManager {
     public static void chooseAccountMenu() {
         while (true) {
             UIManager.clearScreen();
-            UIManager.displayProgramLogo();
+            UIManager.displayBanner("title.txt");
             UIManager.displayChooseAccountMenu();
             MessageLog.displayAll();
 
             // ask user which account to login
             int accountChoice = InputHandler.getValidChoice(AccountType.getValues());
-            if (accountChoice == MenuOption.AccountType.LOGOUT) { break; }
+            if (accountChoice == MenuOption.AccountType.LOGOUT) {
+                break;
+            }
             UIManager.login(accountChoice);
         }
     }
@@ -40,7 +47,7 @@ class UIManager {
         do {
             UIManager.clearScreen();
             UIManager.displayLoginTitle();
-            
+
             // Prompt user credentials
             String username = InputHandler.readInput("\nEnter Username\nUsername >> ");
             String password = InputHandler.readInput("\nEnter Password\nPassword >> ");
@@ -49,7 +56,9 @@ class UIManager {
             // A null account means verification failed
             if (account == null) {
                 boolean continueToAttemptLogin = UIManager.retryLogin();
-                if (!continueToAttemptLogin) { return; }
+                if (!continueToAttemptLogin) {
+                    return;
+                }
             }
         } while (account == null);
 
@@ -62,6 +71,7 @@ class UIManager {
         do {
             // Clear screen when entering
             UIManager.clearScreen();
+            UIManager.displayBanner("customer.txt");
             UIManager.displayCustomerMenu();
             // Display any error messages
             MessageLog.displayNext();
@@ -74,7 +84,8 @@ class UIManager {
                     UIManager.clearScreen();
                     customer.buyMedicine();
                 }
-                case CustomerOperation.VIEW_ACCOUNT_DETAILS -> customer.viewAccountDetails();
+                case CustomerOperation.VIEW_ACCOUNT_DETAILS ->
+                    customer.viewAccountDetails();
                 case CustomerOperation.DEPOSIT_FUNDS -> {
                     boolean stayingInAddMenu = true;
                     do {
@@ -83,8 +94,11 @@ class UIManager {
                         MessageLog.displayAll();
                         // 2. Then ask what to do next
                         System.out.println(AsciiTableBuilder.buildSingleRow("Would you like to deposit again? (y/n)"));
-                        if (InputHandler.promptYesOrNo()) { continue; }
-                        else { stayingInAddMenu = false; }
+                        if (InputHandler.promptYesOrNo()) {
+                            continue;
+                        } else {
+                            stayingInAddMenu = false;
+                        }
                     } while (stayingInAddMenu);
                 }
                 case CustomerOperation.LOGOUT -> {
@@ -101,6 +115,8 @@ class UIManager {
         do {
             // Clear screen at start of every loop
             UIManager.clearScreen();
+            UIManager.displayBanner("pharmacy.txt");
+
             // Render table menu
             UIManager.displayPharmacyMenu();
             // Display any errors
@@ -124,14 +140,17 @@ class UIManager {
                         String message = "Would you like to add another medicine? (y/n)";
                         System.out.println(AsciiTableBuilder.buildSingleRow(message));
 
-                        if (InputHandler.promptYesOrNo()) continue; // 2. Then ask what to do next
-                        else break;
+                        if (InputHandler.promptYesOrNo()) {
+                            continue; // 2. Then ask what to do next
+                        } else {
+                            break;
+                        }
                     } while (true);
                 }
                 case PharmacyOperation.SHOW_MEDICINE_LIST -> {
                     // display all medicines once
                     List<Medicine> medicines = pharmacy.getMedicines();
-                    
+
                     do {
                         UIManager.clearScreen();
                         System.out.println(AsciiTableBuilder.buildSingleRow("+ Medicine Inventory +"));
@@ -140,7 +159,9 @@ class UIManager {
 
                         System.out.println("Search medicine by name or enter 'q' to exit.");
                         String targetName = InputHandler.readInput("Enter >> ");
-                        if (targetName.equalsIgnoreCase("q")) { break; }
+                        if (targetName.equalsIgnoreCase("q")) {
+                            break;
+                        }
                         List<Medicine> found = pharmacy.searchMedicine(targetName);
 
                         if (found == null) {
@@ -155,10 +176,7 @@ class UIManager {
                     UIManager.clearScreen();
                 }
 
-                case 
-                PharmacyOperation.UPDATE_MEDICINE_AMOUNT, 
-                PharmacyOperation.UPDATE_MEDICINE_PRICE, 
-                PharmacyOperation.DELETE_MEDICINE -> {
+                case PharmacyOperation.UPDATE_MEDICINE_AMOUNT, PharmacyOperation.UPDATE_MEDICINE_PRICE, PharmacyOperation.DELETE_MEDICINE -> {
                     do {
                         List<Medicine> medicines = pharmacy.getMedicines();
                         UIManager.clearScreen();
@@ -221,8 +239,10 @@ class UIManager {
                             System.out.println(AsciiTableBuilder.buildSingleRow(message));
 
                             // 2. Prompt user choice
-                            if (InputHandler.promptYesOrNo()) { pharmacy.deleteMedicine(targetName); }
-                            
+                            if (InputHandler.promptYesOrNo()) {
+                                pharmacy.deleteMedicine(targetName);
+                            }
+
                             // 3. Update list
                             medicines = pharmacy.getMedicines();
                         }
@@ -237,13 +257,14 @@ class UIManager {
 
         do {
             UIManager.clearScreen();
+            UIManager.displayBanner("admin.txt");
             // Print table and any error message
             UIManager.displayAdminMenu();
             MessageLog.displayAll();
 
             // Valid choices
             int choice = InputHandler.getValidChoice(AdminOperation.getValues());
-            
+
             switch (choice) {
                 case AdminOperation.REGISTER_CUSTOMER -> {
                     UIManager.clearScreen();
@@ -251,7 +272,7 @@ class UIManager {
                 }
                 case AdminOperation.SHOW_CUSTOMER_LIST -> {
                     List<Customer> customers = admin.getCustomers();
-                    
+
                     do {
                         UIManager.clearScreen();
                         System.out.println(AsciiTableBuilder.buildSingleRow("+ List Of Registered Customer Accounts +"));
@@ -260,7 +281,9 @@ class UIManager {
 
                         System.out.println("Search customer by name or enter 'q' to exit.");
                         String targetName = InputHandler.readInput("Enter >> ");
-                        if (targetName.equalsIgnoreCase("q")) break;
+                        if (targetName.equalsIgnoreCase("q")) {
+                            break;
+                        }
                         List<Customer> found = admin.searchCustomer(targetName);
 
                         if (found == null) {
@@ -273,9 +296,7 @@ class UIManager {
                     } while (true);
                 }
                 // Customer update or delete
-                case 
-                AdminOperation.UPDATE_CUSTOMER_CREDENTIALS, 
-                AdminOperation.DELETE_CUSTOMER -> {
+                case AdminOperation.UPDATE_CUSTOMER_CREDENTIALS, AdminOperation.DELETE_CUSTOMER -> {
                     List<Customer> customers = admin.getCustomers();
 
                     do {
@@ -296,15 +317,17 @@ class UIManager {
                         String input = InputHandler.readInput("Enter input >> ");
 
                         // exit if quit
-                        if (input.equalsIgnoreCase("q")) break;
+                        if (input.equalsIgnoreCase("q")) {
+                            break;
+                        }
 
                         // do not allow double for position
-                        String doublePattern = "-?(\\d*\\.\\d+|\\d+\\.\\d*)"; 
+                        String doublePattern = "-?(\\d*\\.\\d+|\\d+\\.\\d*)";
                         if (input.matches(doublePattern)) {
                             MessageLog.addError("Enter a valid position");
                             continue;
                         }
-                        
+
                         // if number then select customer, else search
                         int pos = 0;
                         String targetName;
@@ -313,23 +336,26 @@ class UIManager {
                             targetName = customers.get(pos).getName();
                         } catch (NumberFormatException e) {
                             List<Customer> found = admin.searchCustomer(input);
-                            if (found == null) { 
-                                MessageLog.addSuccess("No results found."); 
+                            if (found == null) {
+                                MessageLog.addSuccess("No results found.");
                                 customers = admin.getCustomers(); // reset the table
+                            } else {
+                                customers = found;
                             }
-                            else { customers = found; }
                             continue;
                         } catch (IndexOutOfBoundsException e) {
                             MessageLog.addError("Invalid Position.");
                             continue;
                         }
 
-                        if (choice == AdminOperation.UPDATE_CUSTOMER_CREDENTIALS) { 
-                            admin.updateCustomerDetails(targetName); 
+                        if (choice == AdminOperation.UPDATE_CUSTOMER_CREDENTIALS) {
+                            admin.updateCustomerDetails(targetName);
                         } else {
                             String message = "Are you sure you want to delete " + targetName + "? (y/n)";
                             System.out.println(AsciiTableBuilder.buildSingleRow(message));
-                            if (InputHandler.promptYesOrNo()) { admin.deleteCustomer(targetName); }
+                            if (InputHandler.promptYesOrNo()) {
+                                admin.deleteCustomer(targetName);
+                            }
                             customers = admin.getCustomers(); // update list
                         }
                     } while (true);
@@ -363,7 +389,9 @@ class UIManager {
         System.out.println("\nLogin failed.");
         System.out.println("Enter anything to try again or enter 'q' to exit.");
         String input = InputHandler.readInput("\nEnter Choice >> ", true);
-        if (input.equals("q")) { return false; }
+        if (input.equals("q")) {
+            return false;
+        }
         return true;
     }
 
@@ -373,16 +401,47 @@ class UIManager {
 
     public static void displayMedicineTable(List<Medicine> medicines) {
         System.out.println(AsciiTableBuilder.buildMedicineTable(medicines));
-    };
-    
-    public static void displayChooseAccountMenu() {
+    }
+
+    public static void displayMenu(String header, String[][] menuItems, String exitLabel) {
+        List<String> row = new ArrayList<>();
+        for (String[] item : menuItems) {
+            row.add(">> [" + item[0] + "] " + item[1]);
+        }
+        String footer = " << [0] " + exitLabel;
+
         String table = new AsciiTableBuilder()
-        .setHeader("+ Select Account Type +")
-        .setRows("1. Customer", "2. Pharmacy", "3. Admin")
-        .setFooter("0. Exit")
-        .buildGenericMenuTable();
+                .setHeader(header)
+                .setRows(row.toArray(new String[0]))
+                .setFooter(footer)
+                .buildGenericMenuTable();
+
+        for (String[] item : menuItems) {
+            String id = "[" + item[0] + "]";
+            String label = item[1];
+
+            table = table.replace(id, TextColor.apply(id, Color.LIGHT_GREEN));
+            table = table.replace(label, TextColor.apply(label, Color.WHITE));
+
+        }
+
+        table = table.replace(header, TextColor.apply(header, Color.WHITE));
+        table = table.replace(footer, TextColor.apply(footer, Color.LIGHT_RED));
+
+        table = table.replace(">>", TextColor.apply(">>", Color.WHITE));
 
         System.out.println(table);
+    }
+
+    public static void displayChooseAccountMenu() {
+
+        String[][] items = {
+            {"1", "Customer"},
+            {"2", "Pharmacy"},
+            {"3", "Admin"}
+        };
+
+        UIManager.displayMenu("+ Select Account Type +", items, "Exit");
     }
 
     public static void displayLoginTitle() {
@@ -390,55 +449,48 @@ class UIManager {
     }
 
     public static void displayCustomerMenu() {
-        String table = new AsciiTableBuilder()
-        .setHeader("+ Customer Menu +")
-        .setRows("1. Buy Medicine", "2. View Account Details", "3. Deposit Funds")
-        .setFooter("0. Logout")
-        .buildGenericMenuTable();
 
-        System.out.println(table);
+        String[][] items = {
+            {"1", "Buy Medicine"},
+            {"2", "View Account Details"},
+            {"3", "Deposit Funds"}
+        };
+
+        UIManager.displayMenu("+ Customer Menu +", items, "Logout");
     }
 
     public static void displayPharmacyMenu() {
-        String[] rows = {
-                "1. Add Medicine",
-                "2. Show List of Medicines",
-                "3. Update Medicine Amount",
-                "4. Update Medicine Price",
-                "5. Delete Medicine"
-        };
-        String table = new AsciiTableBuilder()
-                .setHeader("+ Pharmacy Menu +")
-                .setRows(rows)
-                .setFooter("0. Logout")
-                .buildGenericMenuTable();
 
-        System.out.println(table);
+        String[][] items = {
+            {"1", "Add Medicine"},
+            {"2", "Show List of Medicines"},
+            {"3", "Update Medicine Amount"},
+            {"4", "Update Medicine Price"},
+            {"5", "Delete Medicine"}
+        };
+
+        UIManager.displayMenu("+ Pharmacy Menu +", items, "Logout");
     }
 
     public static void displayAdminMenu() {
-        String[] rows = {
-            "1. Register A Customer",
-            "2. Show List Of Customers",
-            "3. Edit Customer Credentials",
-            "4. Edit Pharmacy Credentials",
-            "5. Delete Customer"
-        };
-        String table = new AsciiTableBuilder()
-                    .setHeader("+ Admin Menu +")
-                    .setRows(rows)
-                    .setFooter("0. Exit")
-                    .buildGenericMenuTable();
 
-        System.out.println(table);
+        String[][] items = {
+            {"1", "Register A Customer"},
+            {"2", "Show List Of Customers"},
+            {"3", "Edit Customer Credentials"},
+            {"4", "Edit Pharmacy Credentials"},
+            {"5", "Delete Customer"}
+        };
+
+        UIManager.displayMenu("+ Admin Menu +", items, "Logout");
     }
 
-    public static void displayProgramLogo() {
+    public static void displayBanner(String filename) {
         try {
-            String logo = Files.readString(Path.of("assets", "title.txt"));
+            String logo = Files.readString(Path.of("assets", filename));
             System.out.println(TextColor.apply(logo, Color.LIGHT_GREEN));
         } catch (IOException e) {
-            MessageLog.addError("Failed to load logo.");
+            MessageLog.addError("Failed to load Banner.");
             MessageLog.displayNext();
         }
     }
