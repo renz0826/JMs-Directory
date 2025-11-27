@@ -7,38 +7,41 @@ import com.jmpharmacyims.classes.TextColor.Color;
 
 /**
  * Formats messages into either success or error messages for logging purposes
- * 
+ *
  */
 public class MessageLog {
+
     private static List<String> messages = new ArrayList<>();
 
     /**
      * Method to add an error message to message List
-     * 
+     *
      * @param message the error message to add
      */
     public static void addError(String message) {
-        if (!message.isEmpty()) { 
+        if (!message.isEmpty()) {
             String coloredLabel = TextColor.apply("\n[ERROR]: ", Color.LIGHT_RED);
-            messages.add(coloredLabel + message); 
+            String coloredMessage = TextColor.apply(message, Color.LIGHT_YELLOW);
+            messages.add(coloredLabel + coloredMessage);
         }
     }
 
     /**
      * Method to add a success message to message List
-     * 
+     *
      * @param message the success message to add
      */
     public static void addSuccess(String message) {
-        if (!message.isEmpty()) { 
+        if (!message.isEmpty()) {
             String coloredLabel = TextColor.apply("\n[SUCCESS]: ", Color.LIGHT_GREEN);
-            messages.add(coloredLabel + message); 
+            String coloredMessage = TextColor.apply(message, Color.LIGHT_YELLOW);
+            messages.add(coloredLabel + coloredMessage);
         }
     }
 
     /**
      * Method to display all message logs and clears the list
-     * 
+     *
      */
     public static void displayAll() {
         if (!messages.isEmpty()) {
@@ -54,8 +57,9 @@ public class MessageLog {
     }
 
     /**
-     * Method to display the next message log and removes it immediately from the list
-     * 
+     * Method to display the next message log and removes it immediately from
+     * the list
+     *
      */
     public static void displayNext() {
         if (!messages.isEmpty()) {
