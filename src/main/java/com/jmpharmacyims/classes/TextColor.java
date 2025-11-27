@@ -7,8 +7,9 @@ public class TextColor {
 
     public enum Color {
         LIGHT_RED("\u001B[91m"),
-        LIGHT_GREEN("\u001B[92m"),
+        LIGHT_GREEN("\u001B[38;2;22;218;114m"),
         LIGHT_YELLOW("\u001B[93m"),
+        WHITE("\u001B[97m"),
         RESET("\u001B[0m");
 
         private final String code;
@@ -22,10 +23,10 @@ public class TextColor {
         }
     }
 
-    private TextColor() {}
+    private TextColor() {
+    }
 
     public static String apply(String message, Color color) {
         return color.getCode() + message + Color.RESET.getCode();
     }
 }
-
