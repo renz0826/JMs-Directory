@@ -15,6 +15,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
 public class Database {
+
     private static Path customersDatabasePath = Path.of("accounts", "customers");
     private static Path pharmacyFilePath = Path.of("accounts", "JmPharmacy.json");
     private static Path adminFilePath = Path.of("accounts", "admin.json");
@@ -24,14 +25,14 @@ public class Database {
             .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
 
     /**
-     * 
-     * loops through a given directory and returns an iterator containing the paths to the json files
-     * within the given directory
-     * 
-     * @param directory - A directory storing json files 
-     * @return 
-     *  - A DirectoryStream<Path> iterator of the json files, or null if an error occurs
-     */ 
+     *
+     * loops through a given directory and returns an iterator containing the
+     * paths to the json files within the given directory
+     *
+     * @param directory - A directory storing json files
+     * @return - A DirectoryStream<Path> iterator of the json files, or null if
+     * an error occurs
+     */
     public static List<Path> getCustomerJsonFileList() {
         List<Path> paths = new ArrayList<>();
 
@@ -51,14 +52,18 @@ public class Database {
     // Method to save an object of account
     public static void save(Account data) {
         Path path = objectFiles.get(data);
-        if (path == null) throw new IllegalStateException("Unknown object");
-        
+        if (path == null) {
+            throw new IllegalStateException("Unknown object");
+        }
+
         serialize(data, path);
     }
 
     public static void delete(Customer customer) {
         Path file = objectFiles.get(customer);
-        if (file == null) throw new IllegalStateException("Unknown object");
+        if (file == null) {
+            throw new IllegalStateException("Unknown object");
+        }
 
         // file may already be gone
         try {
@@ -101,7 +106,9 @@ public class Database {
     private static void serialize(Account data, Path permanent) {
         try {
             // System.out.println("path=" + permanent + " exists=" + Files.exists(permanent) + " isRegularFile=" + Files.isRegularFile(permanent));
-            if (permanent.getParent() != null) Files.createDirectories(permanent.getParent());
+            if (permanent.getParent() != null) {
+                Files.createDirectories(permanent.getParent());
+            }
 
             boolean exists = Files.isRegularFile(permanent);
 
@@ -111,16 +118,18 @@ public class Database {
                 // write to temp then atomically replace
                 objectMapper.writeValue(temporary.toFile(), data);
                 Files.move(temporary, permanent, StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE);
-                MessageLog.addSuccess(permanent + " updated successfully!");
+                // MessageLog.addSuccess(permanent + " updated successfully!");
             } else {
                 // new file: write directly
                 objectMapper.writeValue(permanent.toFile(), data);
-                MessageLog.addSuccess(permanent + " created successfully!");
+                // MessageLog.addSuccess(permanent + " created successfully!");
             }
         } catch (IOException e) {
             MessageLog.addError("Failed to write file:\n" + e);
-            try { Files.deleteIfExists(permanent.resolveSibling(permanent.getFileName().toString() + ".tmp")); }
-            catch (IOException ignored) {}
+            try {
+                Files.deleteIfExists(permanent.resolveSibling(permanent.getFileName().toString() + ".tmp"));
+            } catch (IOException ignored) {
+            }
         }
     }
 
@@ -139,12 +148,15 @@ public class Database {
     public static ObjectMapper getObjectMapper() {
         return objectMapper;
     }
+
     public static Path getCustomersDatabasePath() {
         return customersDatabasePath;
     }
+
     public static Path getAdminFilePath() {
         return adminFilePath;
     }
+
     public static Path getPharmacyFilePath() {
         return pharmacyFilePath;
     }
