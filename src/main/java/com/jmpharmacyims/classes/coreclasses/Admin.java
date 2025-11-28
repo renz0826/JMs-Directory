@@ -35,6 +35,7 @@ public class Admin extends Account {
     public void addCustomerAccount() {
         UIManager.displayTitle("+ Register A New Customer Account +");
         System.out.println(TextColor.apply("\nEnter Customer details.", Color.LIGHT_YELLOW));
+        String name = InputHandler.readInput("\nName >> ");
         String username = InputHandler.readInput("\nUsername >> ");
         String password = InputHandler.readInput("\nPassword >> ");
         List<Medicine> medicines = List.of();
