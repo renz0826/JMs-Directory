@@ -132,4 +132,10 @@ public class Pharmacy extends Account implements CanEditCredentials {
     public void setPassword(String password) {
         this.password = password;
     }
+
+    public void setMedicines(List<Medicine> medicines) {
+        if (!medicines.isEmpty()) {
+            this.medicines = medicines;
+        }
+    }
 }
