@@ -396,8 +396,8 @@ class UIManager {
     }
 
     private static boolean retryLogin() {
-        MessageLog.displayAll();
         MessageLog.logError("Login failed.");
+        MessageLog.displayAll();
         System.out.println(TextColor.apply("\n- Enter anything to continue", Color.LIGHT_YELLOW));
         System.out.println(TextColor.apply("- Enter 'q' to exit.", Color.LIGHT_RED));
         String input = InputHandler.readInput("\nEnter Choice >> ", true);
