@@ -1,0 +1,42 @@
+{
+  "name" : "Maria Santos",
+  "username" : "maria.s",
+  "password" : "mspw",
+  "medicines" : [ {
+    "name" : "Ibuprofen",
+    "brand" : "Advil",
+    "purpose" : "Anti-inflammatory",
+    "expirationDate" : "05/09/2026",
+    "amount" : 20,
+    "price" : 12.0
+  }, {
+    "name" : "Naproxen",
+    "brand" : "Aleve",
+    "purpose" : "Pain relief",
+    "expirationDate" : "27/12/2026",
+    "amount" : 14,
+    "price" : 14.5
+  }, {
+    "name" : "Melatonin",
+    "brand" : "Natrol",
+    "purpose" : "Sleep aid",
+    "expirationDate" : "05/04/2027",
+    "amount" : 18,
+    "price" : 9.0
+  }, {
+    "name" : "Loratadine",
+    "brand" : "Claritin",
+    "purpose" : "Allergy relief",
+    "expirationDate" : "01/01/2027",
+    "amount" : 16,
+    "price" : 8.0
+  }, {
+    "name" : "Omeprazole",
+    "brand" : "Losec",
+    "purpose" : "Acid reflux",
+    "expirationDate" : "08/06/2027",
+    "amount" : 10,
+    "price" : 11.0
+  } ],
+  "funds" : 300.0
+}

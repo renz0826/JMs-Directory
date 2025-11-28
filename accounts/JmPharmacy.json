@@ -1,7 +1,7 @@
 {
-  "name" : "JohnMark",
-  "username" : "jmp",
-  "password" : "panganib",
+  "name" : "JmPharmacy",
+  "username" : "user",
+  "password" : "password",
   "medicines" : [ {
     "name" : "Paracetamol",
     "brand" : "Biogesic",
@@ -13,8 +13,134 @@
     "name" : "Amoxicillin",
     "brand" : "Amoxil",
     "purpose" : "Antibiotic for bacterial infections",
-    "expirationDate" : "20/6/2026",
+    "expirationDate" : "20/06/2026",
     "amount" : 50,
     "price" : 12.0
+  }, {
+    "name" : "Ibuprofen",
+    "brand" : "Advil",
+    "purpose" : "Anti-inflammatory and pain relief",
+    "expirationDate" : "11/03/2026",
+    "amount" : 120,
+    "price" : 10.0
+  }, {
+    "name" : "Cetirizine",
+    "brand" : "Allerkid",
+    "purpose" : "Allergy relief",
+    "expirationDate" : "05/09/2026",
+    "amount" : 80,
+    "price" : 6.0
+  }, {
+    "name" : "Loperamide",
+    "brand" : "Imodium",
+    "purpose" : "Diarrhea control",
+    "expirationDate" : "13/01/2027",
+    "amount" : 40,
+    "price" : 7.5
+  }, {
+    "name" : "Metformin",
+    "brand" : "Glucophage",
+    "purpose" : "Blood sugar control",
+    "expirationDate" : "28/02/2027",
+    "amount" : 150,
+    "price" : 15.0
+  }, {
+    "name" : "Amlodipine",
+    "brand" : "Norvasc",
+    "purpose" : "Blood pressure management",
+    "expirationDate" : "10/10/2026",
+    "amount" : 100,
+    "price" : 9.0
+  }, {
+    "name" : "Salbutamol",
+    "brand" : "Ventolin",
+    "purpose" : "Asthma relief",
+    "expirationDate" : "04/07/2026",
+    "amount" : 30,
+    "price" : 120.0
+  }, {
+    "name" : "Guaifenesin",
+    "brand" : "Mucinex",
+    "purpose" : "Mucus expectorant",
+    "expirationDate" : "22/11/2026",
+    "amount" : 60,
+    "price" : 14.0
+  }, {
+    "name" : "Omeprazole",
+    "brand" : "Losec",
+    "purpose" : "Acid reflux treatment",
+    "expirationDate" : "19/08/2026",
+    "amount" : 90,
+    "price" : 11.5
+  }, {
+    "name" : "Ranitidine",
+    "brand" : "Zantac",
+    "purpose" : "Acid reducer",
+    "expirationDate" : "01/02/2026",
+    "amount" : 50,
+    "price" : 7.0
+  }, {
+    "name" : "Diphenhydramine",
+    "brand" : "Benadryl",
+    "purpose" : "Allergy and itch relief",
+    "expirationDate" : "12/12/2026",
+    "amount" : 70,
+    "price" : 6.5
+  }, {
+    "name" : "Aspirin",
+    "brand" : "Bayer",
+    "purpose" : "Pain relief and anti-clotting",
+    "expirationDate" : "05/05/2027",
+    "amount" : 200,
+    "price" : 4.5
+  }, {
+    "name" : "Simvastatin",
+    "brand" : "Zocor",
+    "purpose" : "Cholesterol control",
+    "expirationDate" : "07/03/2027",
+    "amount" : 90,
+    "price" : 18.0
+  }, {
+    "name" : "Azithromycin",
+    "brand" : "Zithromax",
+    "purpose" : "Broad-spectrum antibiotic",
+    "expirationDate" : "30/09/2026",
+    "amount" : 45,
+    "price" : 22.0
+  }, {
+    "name" : "Prednisone",
+    "brand" : "Deltasone",
+    "purpose" : "Anti-inflammatory steroid",
+    "expirationDate" : "14/07/2027",
+    "amount" : 70,
+    "price" : 16.0
+  }, {
+    "name" : "Melatonin",
+    "brand" : "Natrol",
+    "purpose" : "Sleep aid",
+    "expirationDate" : "03/03/2027",
+    "amount" : 60,
+    "price" : 8.5
+  }, {
+    "name" : "Buscopan",
+    "brand" : "Buscopan",
+    "purpose" : "Stomach cramps relief",
+    "expirationDate" : "02/10/2026",
+    "amount" : 40,
+    "price" : 11.0
+  }, {
+    "name" : "Domperidone",
+    "brand" : "Motilium",
+    "purpose" : "Nausea and vomiting relief",
+    "expirationDate" : "18/08/2027",
+    "amount" : 55,
+    "price" : 9.0
+  }, {
+    "name" : "Hydralazine",
+    "brand" : "Apresoline",
+    "purpose" : "Blood pressure management",
+    "expirationDate" : "22/04/2027",
+    "amount" : 30,
+    "price" : 13.0
   } ]
 }

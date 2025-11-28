@@ -1,16 +1,42 @@
 {
-    "name": "Alice Reyes",
-    "username": "alice.r",
-    "password": "alicepw",
-    "medicines": [
-        {
-            "name": "Paracetamol",
-            "brand": "Biogesic",
-            "purpose": "Pain relief",
-            "expirationDate": "15/12/2025",
-            "amount": 10,
-            "price": 5.50
-        }
-    ],
-    "funds": 250.00
+  "name" : "Alice Reyes",
+  "username" : "alice.r",
+  "password" : "alicepw",
+  "medicines" : [ {
+    "name" : "Paracetamol",
+    "brand" : "Biogesic",
+    "purpose" : "Pain relief",
+    "expirationDate" : "15/12/2025",
+    "amount" : 10,
+    "price" : 5.5
+  }, {
+    "name" : "Ibuprofen",
+    "brand" : "Advil",
+    "purpose" : "Anti-inflammatory",
+    "expirationDate" : "03/05/2026",
+    "amount" : 20,
+    "price" : 12.0
+  }, {
+    "name" : "Cetirizine",
+    "brand" : "Allerkid",
+    "purpose" : "Allergy relief",
+    "expirationDate" : "10/09/2026",
+    "amount" : 15,
+    "price" : 7.0
+  }, {
+    "name" : "Amoxicillin",
+    "brand" : "Amoxil",
+    "purpose" : "Antibiotic",
+    "expirationDate" : "12/11/2026",
+    "amount" : 8,
+    "price" : 15.0
+  }, {
+    "name" : "Loperamide",
+    "brand" : "Imodium",
+    "purpose" : "Diarrhea control",
+    "expirationDate" : "22/02/2027",
+    "amount" : 12,
+    "price" : 6.5
+  } ],
+  "funds" : 250.0
 }

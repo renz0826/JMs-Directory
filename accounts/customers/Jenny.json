@@ -1,0 +1,42 @@
+{
+  "name" : "Jenny Cruz",
+  "username" : "jenny.c",
+  "password" : "jcpw",
+  "medicines" : [ {
+    "name" : "Omeprazole",
+    "brand" : "Omeclear",
+    "purpose" : "Acid reflux",
+    "expirationDate" : "30/07/2026",
+    "amount" : 8,
+    "price" : 9.5
+  }, {
+    "name" : "Ranitidine",
+    "brand" : "Zantac",
+    "purpose" : "Acid control",
+    "expirationDate" : "18/03/2026",
+    "amount" : 10,
+    "price" : 7.5
+  }, {
+    "name" : "Buscopan",
+    "brand" : "Buscopan",
+    "purpose" : "Stomach cramps",
+    "expirationDate" : "05/10/2026",
+    "amount" : 6,
+    "price" : 11.0
+  }, {
+    "name" : "Hyoscine",
+    "brand" : "Scopolamine",
+    "purpose" : "Motion sickness",
+    "expirationDate" : "22/01/2027",
+    "amount" : 12,
+    "price" : 13.0
+  }, {
+    "name" : "Domperidone",
+    "brand" : "Motilium",
+    "purpose" : "Nausea relief",
+    "expirationDate" : "11/08/2027",
+    "amount" : 9,
+    "price" : 8.0
+  } ],
+  "funds" : 420.0
+}

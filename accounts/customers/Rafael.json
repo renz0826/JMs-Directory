@@ -1,0 +1,42 @@
+{
+  "name" : "Rafael Torres",
+  "username" : "raf.t",
+  "password" : "rtpw",
+  "medicines" : [ {
+    "name" : "Cough Syrup",
+    "brand" : "Robitussin",
+    "purpose" : "Cough relief",
+    "expirationDate" : "20/01/2026",
+    "amount" : 3,
+    "price" : 80.0
+  }, {
+    "name" : "Dextromethorphan",
+    "brand" : "Delsym",
+    "purpose" : "Cough suppressant",
+    "expirationDate" : "02/08/2026",
+    "amount" : 6,
+    "price" : 95.0
+  }, {
+    "name" : "Salbutamol",
+    "brand" : "Ventolin",
+    "purpose" : "Asthma relief",
+    "expirationDate" : "14/03/2027",
+    "amount" : 10,
+    "price" : 120.0
+  }, {
+    "name" : "Guaifenesin",
+    "brand" : "Mucinex",
+    "purpose" : "Mucus relief",
+    "expirationDate" : "18/07/2026",
+    "amount" : 5,
+    "price" : 70.0
+  }, {
+    "name" : "Ambroxol",
+    "brand" : "Ambrolex",
+    "purpose" : "Expectorant",
+    "expirationDate" : "30/09/2026",
+    "amount" : 7,
+    "price" : 60.0
+  } ],
+  "funds" : 520.0
+}

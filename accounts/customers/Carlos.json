@@ -1,0 +1,42 @@
+{
+  "name" : "Carlos Dizon",
+  "username" : "carlos.d",
+  "password" : "cdpw",
+  "medicines" : [ {
+    "name" : "Cetirizine",
+    "brand" : "Allerkid",
+    "purpose" : "Allergy relief",
+    "expirationDate" : "10/03/2026",
+    "amount" : 15,
+    "price" : 7.0
+  }, {
+    "name" : "Diphenhydramine",
+    "brand" : "Benadryl",
+    "purpose" : "Allergy relief",
+    "expirationDate" : "21/09/2026",
+    "amount" : 10,
+    "price" : 6.5
+  }, {
+    "name" : "Aspirin",
+    "brand" : "Bayer",
+    "purpose" : "Pain relief",
+    "expirationDate" : "12/12/2026",
+    "amount" : 25,
+    "price" : 5.0
+  }, {
+    "name" : "Metformin",
+    "brand" : "Glucophage",
+    "purpose" : "Diabetes management",
+    "expirationDate" : "03/04/2027",
+    "amount" : 12,
+    "price" : 20.0
+  }, {
+    "name" : "Simvastatin",
+    "brand" : "Zocor",
+    "purpose" : "Cholesterol control",
+    "expirationDate" : "29/07/2027",
+    "amount" : 18,
+    "price" : 18.0
+  } ],
+  "funds" : 150.0
+}
