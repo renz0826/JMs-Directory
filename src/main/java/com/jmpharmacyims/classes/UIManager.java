@@ -13,7 +13,7 @@ import com.jmpharmacyims.classes.MenuOption.PharmacyOperation;
 import com.jmpharmacyims.classes.TextColor.Color;
 // UI class for design
 
-class UIManager {
+class UIManager { 
 
     public static void clearScreen() {
         try {
@@ -32,7 +32,7 @@ class UIManager {
             MessageLog.displayAll();
 
             // ask user which account to login
-            int accountChoice = InputHandler.getValidChoice(AccountType.getValues());
+            int accountChoice = InputHandler.readValidChoice(AccountType.getValues());
             if (accountChoice == MenuOption.AccountType.LOGOUT) {
                 UIManager.loading("Exiting Program");
                 System.out.println();
@@ -79,7 +79,7 @@ class UIManager {
             MessageLog.displayNext();
 
             // Get valid choices from user
-            int choice = InputHandler.getValidChoice(CustomerOperation.getValues());
+            int choice = InputHandler.readValidChoice(CustomerOperation.getValues());
 
             switch (choice) {
                 case CustomerOperation.BUY_MEDICINE -> {
@@ -125,7 +125,7 @@ class UIManager {
             MessageLog.displayAll();
 
             // Initialize choice
-            int mainChoice = InputHandler.getValidChoice(PharmacyOperation.getValues());
+            int mainChoice = InputHandler.readValidChoice(PharmacyOperation.getValues());
 
             // Handle Main Menu Actions
             switch (mainChoice) {
@@ -168,10 +168,10 @@ class UIManager {
 
                         if (found == null) {
                             // Reset to original list if target medicines are not found
-                            MessageLog.addError("No results found.");
+                            MessageLog.logError("No results found.");
                             medicines = pharmacy.getMedicines();
                         } else {
-                            MessageLog.addSuccess("Returned " + found.size() + " results.");
+                            MessageLog.logSuccess("Returned " + found.size() + " results.");
                             medicines = found;
                         }
                     } while (true);
@@ -208,7 +208,7 @@ class UIManager {
                         // do not allow double for position
                         String doublePattern = "-?(\\d*\\.\\d+|\\d+\\.\\d*)";
                         if (input.matches(doublePattern)) {
-                            MessageLog.addError("Enter a valid position");
+                            MessageLog.logError("Enter a valid position");
                             continue;
                         }
 
@@ -221,24 +221,24 @@ class UIManager {
                         } catch (NumberFormatException e) {
                             List<Medicine> result = pharmacy.searchMedicine(input);
                             if (result == null) {
-                                MessageLog.addError("No results found");
+                                MessageLog.logError("No results found");
                             } else {
                                 medicines = result;
                             }
                             continue;
                         } catch (IndexOutOfBoundsException e) {
-                            MessageLog.addError("Invalid Position.");
+                            MessageLog.logError("Invalid Position.");
                             continue;
                         }
 
                         if (mainChoice == PharmacyOperation.UPDATE_MEDICINE_AMOUNT) {
                             int amount = InputHandler.readInt("\nEnter amount >> ", true);
                             pharmacy.updateMedicineAmount(targetName, amount);
-                            MessageLog.addSuccess(targetName + "\'s amount has been successfully updated to " + amount + ".");
+                            MessageLog.logSuccess(targetName + "\'s amount has been successfully updated to " + amount + ".");
                         } else if (mainChoice == PharmacyOperation.UPDATE_MEDICINE_PRICE) {
                             double amount = InputHandler.readDouble("\nEnter new price >> ");
                             pharmacy.updateMedicinePrice(targetName, amount);
-                            MessageLog.addSuccess(targetName + "\'s price has been successfully updated to " + amount + ".");
+                            MessageLog.logSuccess(targetName + "\'s price has been successfully updated to " + amount + ".");
                         } else {
                             String message = "Are you sure you want to delete " + targetName + "? (y/n)";
                             System.err.println();
@@ -247,7 +247,7 @@ class UIManager {
                             // 2. Prompt user choice
                             if (InputHandler.promptYesOrNo()) {
                                 pharmacy.deleteMedicine(targetName);
-                                MessageLog.addSuccess(targetName + " has been successfully deleted.");
+                                MessageLog.logSuccess(targetName + " has been successfully deleted.");
                             }
 
                             // 3. Update list
@@ -270,7 +270,7 @@ class UIManager {
             MessageLog.displayAll();
 
             // Valid choices
-            int choice = InputHandler.getValidChoice(AdminOperation.getValues());
+            int choice = InputHandler.readValidChoice(AdminOperation.getValues());
 
             switch (choice) {
                 case AdminOperation.REGISTER_CUSTOMER -> {
@@ -296,10 +296,10 @@ class UIManager {
                         List<Customer> found = admin.searchCustomer(targetName);
 
                         if (found == null) {
-                            MessageLog.addError("No results found.");
+                            MessageLog.logError("No results found.");
                             customers = admin.getCustomers();
                         } else {
-                            MessageLog.addSuccess("Returned " + found.size() + " results.");
+                            MessageLog.logSuccess("Returned " + found.size() + " results.");
                             customers = found;
                         }
                     } while (true);
@@ -334,7 +334,7 @@ class UIManager {
                         // do not allow double for position
                         String doublePattern = "-?(\\d*\\.\\d+|\\d+\\.\\d*)";
                         if (input.matches(doublePattern)) {
-                            MessageLog.addError("Enter a valid position");
+                            MessageLog.logError("Enter a valid position");
                             continue;
                         }
 
@@ -347,14 +347,14 @@ class UIManager {
                         } catch (NumberFormatException e) {
                             List<Customer> found = admin.searchCustomer(input);
                             if (found == null) {
-                                MessageLog.addError("No results found.");
+                                MessageLog.logError("No results found.");
                                 customers = admin.getCustomers(); // reset the table
                             } else {
                                 customers = found;
                             }
                             continue;
                         } catch (IndexOutOfBoundsException e) {
-                            MessageLog.addError("Invalid Position.");
+                            MessageLog.logError("Invalid Position.");
                             continue;
                         }
 
@@ -384,7 +384,7 @@ class UIManager {
         } while (continueMenuLoop);
     }
 
-    public static void routeToAccountMenu(Account account) {
+    private static void routeToAccountMenu(Account account) {
         // Call respective Account menu
         if (account instanceof Customer) {
             runCustomerMenu((Customer) account);
@@ -395,9 +395,9 @@ class UIManager {
         }
     }
 
-    public static boolean retryLogin() {
+    private static boolean retryLogin() {
         MessageLog.displayAll();
-        MessageLog.addError("Login failed.");
+        MessageLog.logError("Login failed.");
         System.out.println(TextColor.apply("\n- Enter anything to continue", Color.LIGHT_YELLOW));
         System.out.println(TextColor.apply("- Enter 'q' to exit.", Color.LIGHT_RED));
         String input = InputHandler.readInput("\nEnter Choice >> ", true);
@@ -481,7 +481,7 @@ class UIManager {
         System.out.println(table);
     }
 
-    public static void displayCustomerMenu() {
+    private static void displayCustomerMenu() {
 
         String[][] items = {
             {"1", "Buy Medicine"},
@@ -492,7 +492,7 @@ class UIManager {
         UIManager.displayMenu("+ Customer Menu +", items, "Logout");
     }
 
-    public static void displayPharmacyMenu() {
+    private static void displayPharmacyMenu() {
 
         String[][] items = {
             {"1", "Add Medicine"},
@@ -505,7 +505,7 @@ class UIManager {
         UIManager.displayMenu("+ Pharmacy Menu +", items, "Logout");
     }
 
-    public static void displayAdminMenu() {
+    private static void displayAdminMenu() {
 
         String[][] items = {
             {"1", "Register A Customer"},
@@ -523,7 +523,7 @@ class UIManager {
             String logo = Files.readString(Path.of("assets", filename));
             System.out.println(TextColor.apply(logo, Color.LIGHT_GREEN));
         } catch (IOException e) {
-            MessageLog.addError("Failed to load Banner.");
+            MessageLog.logError("Failed to load Banner.");
             MessageLog.displayNext();
         }
     }

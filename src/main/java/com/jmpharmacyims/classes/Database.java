@@ -19,7 +19,7 @@ public class Database {
     private static Path customersDatabasePath = Path.of("accounts", "customers");
     private static Path pharmacyFilePath = Path.of("accounts", "JmPharmacy.json");
     private static Path adminFilePath = Path.of("accounts", "admin.json");
-    private static Map<Account, Path> objectFiles = new HashMap<>();
+    private static Map<Account, Path> fileMap = new HashMap<>();
     private static ObjectMapper objectMapper = new ObjectMapper()
             .enable(SerializationFeature.INDENT_OUTPUT)
             .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
@@ -43,7 +43,7 @@ public class Database {
 
             return paths;
         } catch (IOException e) {
-            MessageLog.addError(getCustomersDatabasePath().toAbsolutePath() + " is missing!");
+            MessageLog.logError(getCustomersDatabasePath().toAbsolutePath() + " is missing!");
         }
 
         return null;
@@ -51,7 +51,7 @@ public class Database {
 
     // Method to save an object of account
     public static void save(Account data) {
-        Path path = objectFiles.get(data);
+        Path path = fileMap.get(data);
         if (path == null) {
             throw new IllegalStateException("Unknown object");
         }
@@ -60,7 +60,7 @@ public class Database {
     }
 
     public static void delete(Customer customer) {
-        Path file = objectFiles.get(customer);
+        Path file = fileMap.get(customer);
         if (file == null) {
             throw new IllegalStateException("Unknown object");
         }
@@ -69,22 +69,31 @@ public class Database {
         try {
             Files.deleteIfExists(file);
         } catch (IOException e) {
-            MessageLog.addError("File operation occured.");
+            MessageLog.logError("File operation occured.");
         }
 
         // remove tracking either way
-        objectFiles.remove(customer);
+        fileMap.remove(customer);
     }
 
-    public static void createCustomer(Customer data) {
-        createFile(data, customersDatabasePath);
+    public static void createNew(Customer data) {
+        Path path = customersDatabasePath.resolve(data.getName() + ".json");
+
+        if (Files.exists(path)) {
+            MessageLog.logError(data.getName() + "'s account already exists!");
+            return;
+        } else {
+            MessageLog.logSuccess(data.getName() + "'s account has been successfully registered.");
+        }
+
+        serialize(data, path);
     }
 
     // Method to load an object of account 
     public static <T extends Account> T load(Path filePath, Class<T> account) {
         T obj = deserialize(filePath, account);
         if (obj != null) {
-            objectFiles.put(obj, filePath);
+            fileMap.put(obj, filePath);
         }
         return obj;
     }
@@ -94,7 +103,7 @@ public class Database {
         try {
             return objectMapper.readValue(filePath.toFile(), account);
         } catch (IOException e) {
-            MessageLog.addError("Failed to parse JSON: " + filePath + " is empty or missing.");
+            MessageLog.logError("Failed to parse JSON: " + filePath + " is empty or missing.");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -125,7 +134,7 @@ public class Database {
                 // MessageLog.addSuccess(permanent + " created successfully!");
             }
         } catch (IOException e) {
-            MessageLog.addError("Failed to write file:\n" + e);
+            MessageLog.logError("Failed to write file:\n" + e);
             try {
                 Files.deleteIfExists(permanent.resolveSibling(permanent.getFileName().toString() + ".tmp"));
             } catch (IOException ignored) {
@@ -133,23 +142,24 @@ public class Database {
         }
     }
 
-    private static <T extends Account> void createFile(T data, Path basePath) {
-        Path path = basePath.resolve(data.getName() + ".json");
+    /* private static <T extends Account> void createFile(T data, Path basePath) {
+    //     Path path = basePath.resolve(data.getName() + ".json");
 
-        if (Files.exists(path)) {
-            MessageLog.addError(data.getName() + "'s account already exists!");
-            return;
-        } else {
-            MessageLog.addSuccess(data.getName() + "'s account has been successfully registered.");
-        }
+    //     if (Files.exists(path)) {
+    //         MessageLog.addError(data.getName() + "'s account already exists!");
+    //         return;
+    //     } else {
+    //         MessageLog.addSuccess(data.getName() + "'s account has been successfully registered.");
+    //     }
 
-        serialize(data, path);
-    }
+    //     serialize(data, path);
+    // }
 
-    // Getters
-    public static ObjectMapper getObjectMapper() {
-        return objectMapper;
-    }
+    // Getters*/ 
+
+    // public static ObjectMapper getObjectMapper() {
+    //     return objectMapper;
+    // }
 
     public static Path getCustomersDatabasePath() {
         return customersDatabasePath;

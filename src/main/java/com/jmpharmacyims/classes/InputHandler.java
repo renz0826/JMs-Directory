@@ -10,7 +10,6 @@ import com.jmpharmacyims.classes.TextColor.Color;
 
 // This class handles user input and input validation
 public class InputHandler {
-
     private static final Scanner SCAN = new Scanner(System.in);
     private static String errorLabel = TextColor.apply("\n[ERROR]: ", Color.LIGHT_RED);
 
@@ -20,7 +19,7 @@ public class InputHandler {
             System.out.println(
                     TextColor.apply("\n[INFO]: ", Color.LIGHT_YELLOW)
                     + "Input stream closed (EOF detected). Exiting...");
-            close();
+            closeScanner();
             System.exit(0); // Clean exit
         }
     }
@@ -42,7 +41,7 @@ public class InputHandler {
      * @param validChoices the set of available choices
      * @return the valid choice as integer
      */
-    public static int getValidChoice(Set<Integer> validChoices) {
+    public static int readValidChoice(Set<Integer> validChoices) {
         while (true) {
             // Validate inputs
             try {
@@ -240,7 +239,7 @@ public class InputHandler {
     }
 
     // Reminder: Call this on the very last line of the "main" program
-    public static void close() {
+    public static void closeScanner() {
         SCAN.close();
     }
 }

@@ -42,7 +42,7 @@ public class Pharmacy extends Account {
         Database.save(this);
 
         UIManager.loading("Adding medicine");
-        MessageLog.addSuccess(name + " has been successfully added to the inventory.\n");
+        MessageLog.logSuccess(name + " has been successfully added to the inventory.\n");
         MessageLog.displayNext();
     }
 

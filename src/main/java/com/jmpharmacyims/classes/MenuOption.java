@@ -9,7 +9,7 @@ import java.util.Set;
  */
 public class MenuOption {
     private MenuOption() {}
-    
+     
     private static interface HasLogOut {
         static final int LOGOUT = 0;
     }

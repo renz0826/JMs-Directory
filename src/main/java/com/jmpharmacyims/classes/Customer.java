@@ -72,7 +72,7 @@ public class Customer extends Account {
                     Medicine selectedMedicine = currentDisplayList.get(pos);
 
                     if (selectedMedicine.getAmount() <= 0) {
-                        MessageLog.addError("Item is out of stock.");
+                        MessageLog.logError("Item is out of stock.");
                         continue;
                     }
 
@@ -80,17 +80,17 @@ public class Customer extends Account {
                     int quantity = InputHandler.readInt("\nUnits >> ");
 
                     if (quantity > selectedMedicine.getAmount()) {
-                        MessageLog.addError("Only " + selectedMedicine.getAmount() + " units available.");
+                        MessageLog.logError("Only " + selectedMedicine.getAmount() + " units available.");
                         continue;
                     } else if (quantity <= 0) {
-                        MessageLog.addError("Quantity cannot be 0.");
+                        MessageLog.logError("Quantity cannot be 0.");
                         continue;
                     }
 
                     double totalCost = quantity * selectedMedicine.getPrice();
 
                     if (this.funds < totalCost) {
-                        MessageLog.addError("Insufficient funds.");
+                        MessageLog.logError("Insufficient funds.");
                         continue;
                     }
 
@@ -142,20 +142,20 @@ public class Customer extends Account {
                             unitsOf = " units of ";
                         }
 
-                        MessageLog.addSuccess(quantity + unitsOf + selectedMedicine.getName() + " has been successfully bought for Php " + totalCost
+                        MessageLog.logSuccess(quantity + unitsOf + selectedMedicine.getName() + " has been successfully bought for Php " + totalCost
                         );
                     }
                 } else {
-                    MessageLog.addError("Invalid position.");
+                    MessageLog.logError("Invalid position.");
                 }
             } catch (NumberFormatException e) {
                 List<Medicine> searchResult = targetPharmacy.searchMedicine(input);
                 if (searchResult == null) {
-                    MessageLog.addError("No results found.");
+                    MessageLog.logError("No results found.");
                     currentDisplayList = targetPharmacy.getMedicines();
                     continue;
                 } else {
-                    MessageLog.addSuccess("Found " + searchResult.size() + " results.");
+                    MessageLog.logSuccess("Found " + searchResult.size() + " results.");
                     currentDisplayList = searchResult;
                     continue;
                 }
@@ -188,7 +188,7 @@ public class Customer extends Account {
 
         UIManager.loading("Processing transaction");
 
-        MessageLog.addSuccess("Php " + amount + " has been successfully added in your account.");
+        MessageLog.logSuccess("Php " + amount + " has been successfully added in your account.");
 
         this.funds += amount;
 

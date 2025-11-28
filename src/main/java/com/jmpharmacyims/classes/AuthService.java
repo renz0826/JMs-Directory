@@ -4,7 +4,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 
-public class AuthService {
+public class AuthService { 
     private static List<Path> customerFiles;
 
     public static Admin logInAdmin(String username, String password) {
@@ -14,10 +14,10 @@ public class AuthService {
         if (admin == null) { return null; }
 
         if (admin.getUsername().equals(username) && admin.getPassword().equals(password)) {
-            MessageLog.addSuccess("Admin authorized!");
+            MessageLog.logSuccess("Admin authorized!");
             return admin;
         } else {
-            MessageLog.addError("Unauthorized!");
+            MessageLog.logError("Unauthorized!");
             return null;
         }
     }
@@ -29,10 +29,10 @@ public class AuthService {
         if (pharmacy == null) { return null; }
 
         if (pharmacy.getUsername().equals(username) && pharmacy.getPassword().equals(password)) {
-            MessageLog.addSuccess("Pharmacy authorized");
+            MessageLog.logSuccess("Pharmacy authorized");
             return pharmacy;
         } else {
-            MessageLog.addError("Unauthorized");
+            MessageLog.logError("Unauthorized");
             return null;
         }
     }
@@ -52,7 +52,7 @@ public class AuthService {
                 }
 
                 if (customer.getUsername().equals(username) && customer.getPassword().equals(password)) {
-                    MessageLog.addSuccess("Customer authorized.");
+                    MessageLog.logSuccess("Customer authorized.");
                     return customer;
                 }
             }

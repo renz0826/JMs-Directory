@@ -35,7 +35,7 @@ public class Admin extends Account {
         List<Medicine> medicines = List.of();
 
         Customer newCustomer = new Customer(name, username, password, medicines, 0);
-        Database.createCustomer(newCustomer);
+        Database.createNew(newCustomer);
         UIManager.loading("Registering customer");
         loadCustomers(); // refresh the list so the new accounts are included
     }
@@ -70,7 +70,7 @@ public class Admin extends Account {
         Database.save(customer);
 
         UIManager.loading("Updating credentials");
-        MessageLog.addSuccess(targetName + "'s credentials has been successfully updated.");
+        MessageLog.logSuccess(targetName + "'s credentials has been successfully updated.");
     }
 
     public void updatePharmacyDetails() {
@@ -85,7 +85,7 @@ public class Admin extends Account {
         Database.save(pharmacy);
 
         UIManager.loading("Updating credentials");
-        MessageLog.addSuccess(pharmacy.getName() + "'s credentials has been successfully updated.");
+        MessageLog.logSuccess(pharmacy.getName() + "'s credentials has been successfully updated.");
     }
 
     // DELETE
@@ -96,7 +96,7 @@ public class Admin extends Account {
         loadCustomers();
 
         UIManager.loading("Deleting customer");
-        MessageLog.addSuccess(targetName + "'s account has been successfully deleted.");
+        MessageLog.logSuccess(targetName + "'s account has been successfully deleted.");
     }
 
     // GETTERS

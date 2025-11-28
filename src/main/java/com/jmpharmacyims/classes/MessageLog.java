@@ -18,7 +18,7 @@ public class MessageLog {
      *
      * @param message the error message to add
      */
-    public static void addError(String message) {
+    public static void logError(String message) {
         if (!message.isEmpty()) {
             String coloredLabel = TextColor.apply("\n[ERROR]: ", Color.LIGHT_RED);
             String coloredMessage = TextColor.apply(message, Color.LIGHT_YELLOW);
@@ -31,7 +31,7 @@ public class MessageLog {
      *
      * @param message the success message to add
      */
-    public static void addSuccess(String message) {
+    public static void logSuccess(String message) {
         if (!message.isEmpty()) {
             String coloredLabel = TextColor.apply("\n[SUCCESS]: ", Color.LIGHT_GREEN);
             String coloredMessage = TextColor.apply(message, Color.LIGHT_YELLOW);
