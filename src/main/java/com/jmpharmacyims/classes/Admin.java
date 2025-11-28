@@ -20,7 +20,7 @@ public class Admin extends Account {
             @JsonProperty("password") String password) {
         super(name, username, password);
 
-        loadCustomers();
+        customers = Database.loadCustomers();
         pharmacy = Database.load(Database.getPharmacyFilePath(), Pharmacy.class);
     }
 
@@ -37,7 +37,7 @@ public class Admin extends Account {
         Customer newCustomer = new Customer(name, username, password, medicines, 0);
         Database.createNew(newCustomer);
         UIManager.loading("Registering customer");
-        loadCustomers(); // refresh the list so the new accounts are included
+        Database.loadCustomers(); // refresh the list so the new accounts are included
     }
 
     // READ
@@ -93,7 +93,7 @@ public class Admin extends Account {
         Customer customer = getCustomer(targetName);
         customers.remove(customer);
         Database.delete(customer);
-        loadCustomers();
+        Database.loadCustomers();
 
         UIManager.loading("Deleting customer");
         MessageLog.logSuccess(targetName + "'s account has been successfully deleted.");
@@ -113,14 +113,5 @@ public class Admin extends Account {
         }
 
         return null;
-    }
-
-    private void loadCustomers() {
-        customers = new ArrayList<>();
-
-        for (Path path : Database.getCustomerJsonFileList()) {
-            Customer customer = Database.load(path, Customer.class);
-            customers.add(customer);
-        }
     }
 }

@@ -142,25 +142,6 @@ public class Database {
         }
     }
 
-    /* private static <T extends Account> void createFile(T data, Path basePath) {
-    //     Path path = basePath.resolve(data.getName() + ".json");
-
-    //     if (Files.exists(path)) {
-    //         MessageLog.addError(data.getName() + "'s account already exists!");
-    //         return;
-    //     } else {
-    //         MessageLog.addSuccess(data.getName() + "'s account has been successfully registered.");
-    //     }
-
-    //     serialize(data, path);
-    // }
-
-    // Getters*/ 
-
-    // public static ObjectMapper getObjectMapper() {
-    //     return objectMapper;
-    // }
-
     public static Path getCustomersDatabasePath() {
         return customersDatabasePath;
     }
@@ -171,5 +152,15 @@ public class Database {
 
     public static Path getPharmacyFilePath() {
         return pharmacyFilePath;
+    }
+
+    public static List<Customer> loadCustomers() {
+        List<Customer> customers = new ArrayList<>();
+        for (Path path : Database.getCustomerJsonFileList()) {
+            Customer customer = Database.load(path, Customer.class);
+            customers.add(customer);
+        }
+
+        return customers;
     }
 }

@@ -26,12 +26,10 @@ public class Customer extends Account implements CanEditCredentials {
         this.funds = funds;
     }
 
-    // --- REQUIRED GETTERS (Jackson needs these to save data) ---
     public double getFunds() {
         return funds;
     }
 
-    // [CRITICAL FIX]: You must have this method for medicines to appear in the JSON file
     public List<Medicine> getMedicines() {
         return medicines;
     }
