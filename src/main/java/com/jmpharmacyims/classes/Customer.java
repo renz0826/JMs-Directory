@@ -182,6 +182,8 @@ public class Customer extends Account {
         UIManager.clearScreen();
         UIManager.displayPopUp("+ Deposit Funds +", "How much would you like to deposit?");
 
+        System.out.println(TextColor.apply("\n[ Current Balance: Php " + getFunds(), Color.WHITE) + " ]");
+
         double amount = InputHandler.readDouble("\nEnter amount >> ");
 
         UIManager.loading("Processing transaction");
@@ -192,7 +194,7 @@ public class Customer extends Account {
 
         MessageLog.displayNext();
 
-        System.out.println(TextColor.apply("\nCurrent Balance: Php " + getFunds(), Color.WHITE) + "\n");
+        System.out.println(TextColor.apply("\n[ Updated Balance: Php " + getFunds(), Color.WHITE) + " ]\n");
 
         Database.save(this);
     }
