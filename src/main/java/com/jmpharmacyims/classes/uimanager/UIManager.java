@@ -1,4 +1,4 @@
-package com.jmpharmacyims.classes;
+package com.jmpharmacyims.classes.uimanager;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -6,14 +6,19 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.jmpharmacyims.classes.MenuOption.AccountType;
-import com.jmpharmacyims.classes.MenuOption.AdminOperation;
-import com.jmpharmacyims.classes.MenuOption.CustomerOperation;
-import com.jmpharmacyims.classes.MenuOption.PharmacyOperation;
-import com.jmpharmacyims.classes.TextColor.Color;
 // UI class for design
+import com.jmpharmacyims.classes.coreclasses.Account;
+import com.jmpharmacyims.classes.coreclasses.Admin;
+import com.jmpharmacyims.classes.coreclasses.Customer;
+import com.jmpharmacyims.classes.coreclasses.Medicine;
+import com.jmpharmacyims.classes.coreclasses.Pharmacy;
+import com.jmpharmacyims.classes.uimanager.MenuOption.AccountType;
+import com.jmpharmacyims.classes.uimanager.MenuOption.AdminOperation;
+import com.jmpharmacyims.classes.uimanager.MenuOption.CustomerOperation;
+import com.jmpharmacyims.classes.uimanager.MenuOption.PharmacyOperation;
+import com.jmpharmacyims.classes.uimanager.TextColor.Color;
 
-class UIManager {
+public class UIManager {
 
     public static void clearScreen() {
         try {

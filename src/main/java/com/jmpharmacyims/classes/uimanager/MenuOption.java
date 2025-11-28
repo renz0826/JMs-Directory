@@ -1,4 +1,4 @@
-package com.jmpharmacyims.classes;
+package com.jmpharmacyims.classes.uimanager;
 
 import java.util.Set;
 

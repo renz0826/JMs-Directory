@@ -1,4 +1,4 @@
-package com.jmpharmacyims.classes;
+package com.jmpharmacyims.classes.uimanager;
 
 /**
  * Utility class for applying colors to console text

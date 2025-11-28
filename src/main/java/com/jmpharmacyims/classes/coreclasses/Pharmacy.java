@@ -1,11 +1,16 @@
-package com.jmpharmacyims.classes;
+package com.jmpharmacyims.classes.coreclasses;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.jmpharmacyims.classes.TextColor.Color;
+
+import com.jmpharmacyims.classes.uimanager.InputHandler;
+import com.jmpharmacyims.classes.uimanager.MessageLog;
+import com.jmpharmacyims.classes.uimanager.TextColor;
+import com.jmpharmacyims.classes.uimanager.TextColor.Color;
+import com.jmpharmacyims.classes.uimanager.UIManager;
 
 public class Pharmacy extends Account implements CanEditCredentials {
 

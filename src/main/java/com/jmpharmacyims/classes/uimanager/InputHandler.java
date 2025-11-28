@@ -1,4 +1,4 @@
-package com.jmpharmacyims.classes;
+package com.jmpharmacyims.classes.uimanager;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -6,7 +6,7 @@ import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 import java.util.Set;
 
-import com.jmpharmacyims.classes.TextColor.Color;
+import com.jmpharmacyims.classes.uimanager.TextColor.Color;
 
 // This class handles user input and input validation
 public class InputHandler {

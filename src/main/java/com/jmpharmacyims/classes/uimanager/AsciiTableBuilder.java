@@ -1,10 +1,12 @@
-package com.jmpharmacyims.classes;
+package com.jmpharmacyims.classes.uimanager;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import com.jmpharmacyims.classes.TextColor.Color;
+import com.jmpharmacyims.classes.coreclasses.Customer;
+import com.jmpharmacyims.classes.coreclasses.Medicine;
+import com.jmpharmacyims.classes.uimanager.TextColor.Color;
 
 import de.vandermeer.asciitable.AsciiTable;
 import de.vandermeer.asciitable.CWC_LongestLine;

@@ -1,8 +1,14 @@
-package com.jmpharmacyims.classes;
+package com.jmpharmacyims.classes.uimanager;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+
+import com.jmpharmacyims.classes.coreclasses.Account;
+import com.jmpharmacyims.classes.coreclasses.Admin;
+import com.jmpharmacyims.classes.coreclasses.Customer;
+import com.jmpharmacyims.classes.coreclasses.Database;
+import com.jmpharmacyims.classes.coreclasses.Pharmacy;
 
 public class AuthService { 
     private static List<Path> customerFiles;

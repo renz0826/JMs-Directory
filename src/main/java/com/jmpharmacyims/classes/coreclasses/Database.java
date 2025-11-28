@@ -1,4 +1,4 @@
-package com.jmpharmacyims.classes;
+package com.jmpharmacyims.classes.coreclasses;
 
 import java.io.IOException;
 import java.nio.file.DirectoryStream;
@@ -15,6 +15,7 @@ import java.util.Map;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.jmpharmacyims.classes.uimanager.MessageLog;
 
 public class Database {
 

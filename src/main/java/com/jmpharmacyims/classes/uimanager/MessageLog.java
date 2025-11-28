@@ -1,9 +1,9 @@
-package com.jmpharmacyims.classes;
+package com.jmpharmacyims.classes.uimanager;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.jmpharmacyims.classes.TextColor.Color;
+import com.jmpharmacyims.classes.uimanager.TextColor.Color;
 
 /**
  * Formats messages into either success or error messages for logging purposes

@@ -1,4 +1,4 @@
-package com.jmpharmacyims.classes;
+package com.jmpharmacyims.classes.coreclasses;
 
 public interface CanEditCredentials {
     public void setUsername(String username);

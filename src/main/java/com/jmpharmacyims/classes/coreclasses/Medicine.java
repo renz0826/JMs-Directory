@@ -1,9 +1,9 @@
-package com.jmpharmacyims.classes;
+package com.jmpharmacyims.classes.coreclasses;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-class Medicine {
+public class Medicine {
     // Fields
     private String name;
     private String brand;
